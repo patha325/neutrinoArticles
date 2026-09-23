@@ -1,9 +1,7 @@
 # Response to peer review (working checklist)
 
 Version 0.5 is framed as a technical scoping note. It does not claim a
-long-baseline design or a new source-derived feasibility result. The reviewer
-recommendations are divided into implemented editorial/analysis changes and
-the source and detector work still needed for a stronger feasibility paper.
+long-baseline design or a new source-derived feasibility result. The original comments are addressed either in the revised scoping note or in the follow-up gates below. The remaining gates require a named source/receiver design or data unavailable in the demonstration paper; they are not results claimed by version 0.5.
 
 | Review issue | Implemented in version 0.5 | Still required |
 | --- | --- | --- |
@@ -14,7 +12,7 @@ the source and detector work still needed for a stronger feasibility paper.
 | CRC packet results do not use measured event records | Wording corrected throughout; packet simulation uses the published count mean and pulse schedule but is not described as measured or as a decoder reproduction | Reconstruct observed counts/frame sync/code or obtain event-level data |
 | Input-mean uncertainty omitted | Re-estimate `lambda = 2×1402/3454`; propagate approximate Poisson 95% limits through repeated-message simulation; distinguish this from Monte Carlo uncertainty | Selection/systematic uncertainty and observed-data comparison |
 | Power/rate conventions unclear | Define slot duration/rate, raw OOK bit rate, peak on-slot power, full-duty average and input-weighted mean in Section 2; standardize equations, captions and plots | Apply a physical facility model to convert beam/facility input energy |
-| Pulse schedule averaged without phase | Simulate 25 pulses at 2.2 s spacing plus the stated supercycle gap; report latency range over uniform arrival phase | Validate schedule interpretation against original timing records |
+| Pulse schedule averaged without phase | Simulate the published 25-pulse pattern, 2.2 s spacing and 6.267 s post-train interval; report latency over packet start phase. This matches the timing stated in Stancil et al. | None for the published nominal schedule; accelerator clock jitter and acquisition timing remain outside scope |
 | Coding/throughput is assumed | Rename as nominal bookkeeping; add Stancil's 0.37 bit/slot zero-background capacity as a theoretical reference; no FEC gain is claimed | Compare concrete finite-block codes at matched average energy and slot schedule |
 | Compression ratio is hypothetical | Keep 4:1 example explicitly secondary and unmeasured | Test compressor on an identified corpus |
 | Solar System prior art/units | Cite planetary-blockage discussion in [1]; Appendix reports peak one-slot power and explains long integration intervals | Body transmission, geometry and ephemeris simulation |
