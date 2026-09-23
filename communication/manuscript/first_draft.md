@@ -1,7 +1,7 @@
 # Direct Neutrino Communication Through the Earth: An Initial Quantitative Feasibility Map
 
 **Sven-Patrik Hallsjö**  
-**Working manuscript, version 0.2 — 23 September 2026**
+**Working manuscript, version 0.3 — 23 September 2026**
 
 > **Status.** This draft combines a published experimental benchmark with a deliberately simplified sensitivity calculation. It has not established the feasibility of a particular accelerator–detector installation. Values described as “beam power” are energy carried by neutrinos; they are neither proton beam power nor facility electrical power. The source-specific and propagation calculations identified in Section 6 are necessary before submission.
 
@@ -227,6 +227,29 @@ An explicitly optimistic long-stream accounting case with 100 MW carried by neut
 
 The submarine case imposes a compact, moving receiver and beam-steering problem. Huber's water-assisted muon detection concept [2] may change its effective target mass and requires a dedicated simulation. The financial case imposes a much shorter deadline: for an illustrative 5,000 km link the 8.48 ms propagation advantage over an ideal shortest-surface conventional-fiber route would require roughly 2.88 GW carried by neutrinos with a 10 kt receiver even before protocol overhead. Under current model assumptions, these applications are therefore **unresolved feasibility studies**, with the finance case particularly constrained by event-collection time. A source-specific beam, detector, propagation and protocol model is required before making engineering or economic claims.
 
+## Appendix A. Occulted links within the Solar System
+
+Neutrino signalling could in principle reach a receiver behind intervening matter when an electromagnetic path is obstructed. Two distinct cases warrant examination. A lunar far-side installation has no direct view of Earth because the Moon lies between transmitter and receiver; NASA is developing lunar relay services for precisely that coverage gap [23]. During Mars solar conjunction, radio links are disrupted by the solar corona over an interval wider than any literal occultation by the solar disk; NASA commonly limits commanding then [24]. A direct neutrino path near or through the Sun is a separate, much less studied alternative to a radio or optical relay [25]. Neither case has an established neutrino source–receiver design.
+
+To put scale on the proposal, extend Eqs. (3)–(5) *only as a geometric sensitivity calculation*. Keep the hypothetical 3 GeV single-flavor beam, 1 mrad far-field half-angle, 10 kt receiver, 50% selected-event efficiency, zero background and 1% uncoded BER for a one-second on symbol. With no intervening-body absorption or flavor conversion and perfect alignment, the full-duty-equivalent neutrino-carried on-symbol power is
+
+`P_ν,full = 0.976 MW × (L/1,000 km)² × (10 kt/M) × (θ/1 mrad)² × (R/1 raw symbol s⁻¹)`.  (A1)
+
+The corresponding selected-event target remains 3.912 per on symbol. The estimates below are computed by `communication/analysis/solar_system_scaling.py` using the same function and constants as the terrestrial model; they describe neutrino energy crossing the assumed beam footprint, **not accelerator electrical power**. Distances use NASA's mean Earth–Moon separation and the defined astronomical unit [26,27]. A far-side surface link would be slightly longer than the centre-to-centre lunar distance, so the lunar row is a scale estimate. The AU rows are illustrative baselines, not claims about any particular Earth–Mars conjunction ephemeris.
+
+| Illustrative separation | Full-duty-equivalent neutrino-carried power for 1 raw symbol/s | One-way vacuum flight time | Interpretation |
+| --- | ---: | ---: | --- |
+| 5,000 km | 24.4 MW | 0.0167 s | Terrestrial reference, same assumptions |
+| 384,400 km | 144,000 MW (144 GW) | 1.28 s | Mean lunar-distance scale |
+| 1 AU, 149.6 million km | 21.8 billion MW (21.8 PW) | 8.32 min | Interplanetary sensitivity example |
+| 2 AU | 87.4 billion MW (87.4 PW) | 16.6 min | Longer illustrative baseline |
+
+These full-duty values scale linearly with target *raw* symbol rate. Equiprobable uncoded on–off signalling has half the on-time energy on average, before synchronization, framing and error correction; it has the same peak on-symbol requirement. For example, retaining a 100 MW neutrino-carried on-symbol power and 10 kt target at lunar distance gives about `100/144,222 ≈ 0.00069` raw symbols/s: one symbol opportunity every 24 minutes under the same zero-background idealization. A 100 MW beam at 1 AU would give about `4.6 × 10⁻⁹` raw symbols/s, or one opportunity every 6.9 years. These are inversions of a stipulated event-count model, **not useful operational rates**; coding, background and acquisition further reduce delivered payload. A notional 0.1 mrad divergence would lower each tabulated power by a factor of 100, but this paper has not demonstrated such a source at 3 GeV and even that factor leaves a severe interplanetary budget.
+
+The geometry also changes the physics that the terrestrial toy model omits. For a lunar far-side link, calculate the actual chord through the Moon, its density profile, neutrino transmission and flavor evolution, then test whether a receiver of the assumed mass could be deployed there. At solar conjunction, compute the time-dependent trajectory and impact parameter through the Sun, energy-dependent interactions, oscillations in solar matter and background at the receiver. A path skimming the corona and one crossing the solar interior cannot share a universal transmission factor. Exact pointing, moving endpoints, source duty cycle and the receiver's projected area matter at both scales. Neutrinos travel at essentially the same vacuum speed as an unobstructed electromagnetic signal over these baselines; occultation avoidance does **not** remove lunar or interplanetary light time.
+
+For an engineering comparison, define a message size, deadline and acceptable failure probability. Compare a source-specific neutrino link's delivered bits/s, electrical joules per delivered bit and total receiver mass against a lunar relay or a solar-conjunction relay plus delay-tolerant scheduling [23,25]. The NASA relay study examines architectures to preserve Earth–Mars communications during solar conjunction [25]. Under the present fixed-divergence example, distance-squared dilution alone makes an interplanetary direct neutrino link implausible at useful payload rates; any claim to the contrary needs a demonstrated narrow source, plausible receiver and full propagation and decoding calculation. The possible niche is a very short, high-value signal in a constrained occultation interval, and even that remains unproven.
+
 ## References
 
 [1] D. D. Stancil *et al.*, “Demonstration of Communication using Neutrinos,” *Modern Physics Letters A* **27**, 1250077 (2012). https://doi.org/10.1142/S0217732312500770 ; https://arxiv.org/abs/1203.2847
@@ -272,3 +295,13 @@ The submarine case imposes a compact, moving receiver and beam-steering problem.
 [21] Consultative Committee for Space Data Systems, *TM Synchronization and Channel Coding*, CCSDS 131.0-B-6 (2026). https://ccsds.org/view/bluebooks/entry/4803/
 
 [22] Y. Collet and M. Kucherawy, “Zstandard Compression and the 'application/zstd' Media Type,” RFC 8878 (2021). https://datatracker.ietf.org/doc/html/rfc8878
+
+[23] NASA, “Exploration and Space Communications: Lunar Communications Relay and Navigation Systems.” https://www.nasa.gov/goddard/esc/lcrns/
+
+[24] NASA/JPL, “What's Mars Solar Conjunction, and Why Does It Matter?” (2019). https://www.jpl.nasa.gov/news/whats-mars-solar-conjunction-and-why-does-it-matter/
+
+[25] NASA Technical Reports Server, “Lagrange-Based Options for Relay Satellites to Eliminate Earth-Mars Communications Outages During Solar Superior Conjunctions” (2020). https://ntrs.nasa.gov/citations/20205007788
+
+[26] NASA Science, “Moon Facts.” https://science.nasa.gov/moon/facts/
+
+[27] NASA/JPL Solar System Dynamics, “Astrodynamic Parameters.” https://ssd.jpl.nasa.gov/astro_par.html
