@@ -1,13 +1,13 @@
 # Direct Neutrino Communication Through the Earth: NuMI-Calibrated Simulation and Far-Field Sensitivity
 
 **Sven-Patrik Hallsjö**  
-**Working manuscript, version 0.5 — 23 September 2026**
+**Working manuscript, version 0.6 — 23 September 2026**
 
 > **Status.** This technical scoping study combines a packet simulation calibrated to the NuMI–MINERvA selected-event mean with a separate, deliberately simplified geometric sensitivity calculation. The simulated packets were not experimentally transmitted. The study has not established a source–detector design for a long-baseline link. Far-field figures use energy carried by neutrinos, **not proton beam power or facility electricity**; the NuMI-derived proton energy estimate describes the published target run and must not be substituted into the far-field model.
 
 ## Abstract
 
-Neutrinos can cross substantial amounts of matter, making a direct communication path through the Earth physically possible; sparse interactions make reception difficult. We examine two distinct questions. For the published NuMI–MINERvA link, a simulation calibrated to its estimated selected-event mean gives a 0.00863 ideal uncoded bit-error probability after five repeated on slots. A separate simulation of 50,000 externally synchronized 40-bit messages with an eight-bit CRC gives a 65.7% correctly accepted fraction after five on-slot repetitions per bit. Accounting for the published nonuniform pulse schedule, the mean modeled packet latency is 587 s, and the corresponding accepted-correct payload rate is 0.0448 bit s⁻¹. A Poisson counting interval on the published input mean changes the modeled correct packet fraction to approximately 60.0–71.9% at five repetitions; these are simulations, not experimentally transmitted packets or an independent reproduction of the published decoder. Separately, an idealized far-field model with a 3 GeV monoenergetic source, 1 mrad divergence, 10 kt detector, 50% selected efficiency, zero background and unit flavor survival gives 0.976, 24.4 and 140.5 MW of **peak neutrino-carried power during on slots** at 1,000, 5,000 and 12,000 km, for one-second slots and a 1% uncoded error target. For equiprobable uncoded OOK, the time-averaged beam power would be half those peak values. These conditional geometric sensitivities do not establish a source with the specified flux or divergence. Submarine, trading and planetary occultation examples remain stress tests, not designed links.
+Neutrinos can pass through substantial matter, potentially enabling direct links where electromagnetic paths are obstructed, but their weak interactions make reception difficult. We present two separate calculations. First, a repeated OOK/CRC simulation calibrated to the published NuMI–MINERvA selected-event mean correctly accepts 65.7% of simulated 40-bit packets after five repetitions, with about 587 s mean latency under assumed external synchronization. Varying the input mean across its approximate Poisson counting interval gives 60–72% correct acceptance; this is a sensitivity range, not a joint confidence interval. Second, a distinct idealized far-field model gives 24.4 MW peak neutrino-carried on-slot power for a 10 kt receiver at 5,000 km, conditional on 3 GeV neutrinos, 1 mrad divergence, 50% selection efficiency, unit flavor survival, zero background and one-second slots. Neither result establishes a practical long-baseline source or measured CRC performance.
 
 **Keywords:** neutrino communication; through-Earth links; Poisson channel; accelerator beam; detector sensitivity; feasibility.
 
@@ -97,7 +97,7 @@ The numerical calculation uses `m_u = 1.66053906660 × 10⁻²⁴ g` and `1 GeV 
 | 5 | 4.05 | 0.00871 | 0.00893 |
 | 9 | 7.29 | 0.000341 | 0.000355 |
 
-**Table 1.** Analytic prediction and implementation check for independently pooled on-pulse opportunities under ideal synchronization and zero background.
+**Table 1.** Analytic prediction and implementation check for independently pooled on-pulse opportunities under ideal synchronization and zero background. This table uses Stancil et al.'s published rounded mean, `λ = 0.81`; Table 1b uses the event-count estimate `λ̂ = 2 × 1402/3454 = 0.8118`.
 
 ![Figure 2: Analytical raw bit-error probability and fixed-seed simulation versus independently pooled pulses.](../figures/02_pooled_pulses_ber.png)
 
@@ -173,13 +173,13 @@ To expose the difference between physical rate and useful rate, define a *bookke
 
 For a 5,000 km chord and 10 kt target under these assumptions, the power column is peak on-slot power. A 100 MW entry corresponds to a 4.10 slot/s model rate, or `τ ≈ 0.244 s` slots; at equiprobable uncoded OOK its time-average power would be about 50 MW.
 
-| Peak on-slot neutrino power | Raw slots/s at 1% uncoded BER | Illustrative coded payload bits/s | If a long telemetry stream compresses 4:1: uncompressed-source-equivalent bits/s |
+| Peak on-slot neutrino power | Raw slots/s at 1% uncoded BER | Bookkeeping payload bits/s (assumed factors; no decoder) | If a long telemetry stream compresses 4:1: uncompressed-source-equivalent bits/s |
 | ---: | ---: | ---: | ---: |
 | 1 MW | 0.0410 | 0.0164 | 0.0656 |
 | 10 MW | 0.410 | 0.164 | 0.656 |
 | 100 MW | **4.10** | **1.64** | **6.56** |
 
-The rightmost column is **not** a faster physical link. The transmitted payload remains 1.64 bit s⁻¹ in the 100 MW row; a hypothetical 4:1 lossless compressor would merely represent a source stream that previously used 6.56 bit s⁻¹. The compression factor is an explicit optimistic assumption for repetitive telemetry, not a measured result and not a plausible default for a tiny already encoded market order. Framing fractions also deteriorate for short messages. The 100 MW example assumes a large fixed detector and an unestablished 100 MW of useful neutrino-carried on-slot power.
+The rightmost column is **not** a faster physical link. The illustrative bookkeeping payload remains 1.64 bit s⁻¹ in the 100 MW row; a hypothetical 4:1 lossless compressor would merely represent a source stream that previously used 6.56 bit s⁻¹. The compression factor is an explicit optimistic assumption for repetitive telemetry, not a measured result and not a plausible default for a tiny already encoded market order. Framing fractions also deteriorate for short messages. The 100 MW example assumes a large fixed detector and an unestablished 100 MW of useful neutrino-carried on-slot power.
 
 A compact figure of merit for the **assumed coded example** is
 
@@ -205,7 +205,7 @@ A useful analogue comes from NASA/JPL's response to Galileo's failed high-gain a
 
 Moision and Hamkins analyze an optical photon-counting deep-space channel, jointly selecting pulse-position modulation (PPM) order and error-control code rate under average and peak power constraints [14]. Poisson event counting is the useful mathematical connection to Eq. (1). In the neutrino case, pulse timing, allowed accelerator patterns, beam-on energy, background and receiver dead time determine whether PPM or another sparse-pulse code can outperform simple on–off keying. No such gain is assumed in Tables 1–2. NASA/JPL's work on joint decoder and frame synchronization at extremely low data rates also supports treating symbol acquisition as a measured part of the link rather than granting it free of charge [15].
 
-Stancil *et al.* also give the zero-background OOK Poisson-channel capacity: `C/R_slot = log₂[1 + (1 − e^(−λ)) exp(−λ/(e^λ − 1))]`, approximately **0.37 bits per pulse** at `λ ≈ 0.81` [1]. At five repetitions, our CRC packet simulation carries about `40 × 0.6568/(48 × 5) ≈ 0.109` correctly accepted payload bits per scheduled slot at the central input mean. This is a finite-packet protocol result, below the asymptotic capacity reference; it does not establish an optimized code or a capacity-achieving rate.
+Stancil *et al.* give the zero-background OOK Poisson-channel capacity `C/R_slot = log₂[1 + (1 − e^(−λ)) exp(−λ/(e^λ − 1))]`, approximately **0.37 bits per pulse** at `λ ≈ 0.81` [1]. Our five-repeat CRC simulation yields about `40 × 0.6568/(48 × 5) ≈ 0.109 correctly accepted payload bits per scheduled slot at the central input mean. These are not directly equivalent performance measurements: 0.109 is a finite-packet payload yield per scheduled slot for one assumed protocol, while 0.37 is an asymptotic channel-capacity reference under Stancil et al.'s stated channel model. Neither value establishes an optimized code or the delivered rate of a practical link.
 
 For the next analysis, compare OOK, repetition with soft count combining, and one constrained PPM scheme using the **same** average source-energy budget and an explicit maximum pulse rate. For each scheme report detection, false acquisition, coding and framing overhead; packet success probability; and delivered information bits per second and per joule. Compression should be evaluated only on a specified source message distribution; random or already compressed payloads do not offer a free gain. Combining counts from multiple receivers is a possible analogue of antenna arraying only after their acceptance, timing and independence are modelled. Delay-tolerant networking may help carry an intermittent link's data end to end, but it does not increase the underlying detected-event rate and is outside this one-hop calculation.
 
@@ -308,7 +308,7 @@ For an engineering comparison, define a message size, deadline and acceptable fa
 
 [10] DUNE Collaboration, *Deep Underground Neutrino Experiment, Far Detector Technical Design Report, Volume I: Introduction to DUNE* (2020). https://arxiv.org/abs/2002.02967
 
-[11] S.-P. Hallsjö, *Direct through-Earth neutrino communication: reproducible scoping study*, accompanying `communication/analysis/` scripts and `communication/data/` scenario and simulation CSV files (working files, 2026).
+[11] S.-P. Hallsjö, *Direct through-Earth neutrino communication: reproducible scoping study*, analysis scripts, data and figures archived in the repository snapshot at commit `7dc09e25e9ad65383ff19733ab7f88fd38aa7b9d` (2026). Reproduction checkout and commands are listed in the repository README.
 
 [12] Hyper-Kamiokande Proto-Collaboration, *Hyper-Kamiokande Design Report* (2018). https://arxiv.org/abs/1805.04163
 
