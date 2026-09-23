@@ -27,6 +27,26 @@ python -m unittest discover -s communication/analysis -p 'test_*.py'
 
 The original model writes its CSV files to the analysis directory when run; the packet and Solar System scripts write to `communication/data/`. The far-field calculation is deliberately idealized: its tabulated MW is **peak neutrino-carried power during on slots** (for equiprobable uncoded OOK, average power is half that value). It is not accelerator electrical power or achieved communications performance. The NuMI-calibrated packet simulation separately counts **proton beam energy incident on the published experimental target**; it does not transfer that receiver event mean to the far-field model.
 
+## Reproducible version 0.5 snapshot
+
+The analysis scripts, generated CSVs and figures used for the version 0.5 scoping study are pinned to commit `7dc09e25e9ad65383ff19733ab7f88fd38aa7b9d`. To reproduce that snapshot exactly:
+
+```bash
+git clone https://github.com/patha325/neutrinoArticles.git
+cd neutrinoArticles
+git checkout 7dc09e25e9ad65383ff19733ab7f88fd38aa7b9d
+python communication/analysis/model.py
+python communication/analysis/tradeoffs.py
+python communication/analysis/throughput.py
+python communication/analysis/empirical_message.py
+python communication/analysis/solar_system_scaling.py
+python -m pip install -r communication/analysis/requirements-figures.txt
+python communication/analysis/make_figures.py
+python -m unittest discover -s communication/analysis -p 'test_*.py'
+```
+
+The manuscript cites this immutable analysis snapshot as reference [11]. The packet-count interval is an input-mean sensitivity analysis; it does not include selection systematics or constitute a joint confidence interval. The 1.64 bit/s coded-throughput example and 4:1 compression factor are bookkeeping assumptions, not measured or decoder-validated delivery rates.
+
 ## Research status
 
 The communication paper is a working technical note. It simulates a repeated-OOK/CRC finite-message protocol using Stancil et al.'s selected-event mean and slot schedule, propagates the Poisson counting interval on that mean, and explores a separate assumed monoenergetic far-field sensitivity. A `communication/notes/reviewer_response.md` checklist records revisions and remaining source, flavor, detector and complete-protocol work. No submission-ready long-baseline engineering feasibility claim is made.

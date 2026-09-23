@@ -1,9 +1,9 @@
 # Response to peer review (working checklist)
 
-Version 0.5 is framed as a technical scoping note. It does not claim a
-long-baseline design or a new source-derived feasibility result. The original comments are addressed either in the revised scoping note or in the follow-up gates below. The remaining gates require a named source/receiver design or data unavailable in the demonstration paper; they are not results claimed by version 0.5.
+Version 0.6 is framed as a technical scoping note. It does not claim a
+long-baseline design or a new source-derived feasibility result. The original comments are addressed either in the revised scoping note or in the follow-up gates below. The remaining gates require a named source/receiver design or data unavailable in the demonstration paper; they are not results claimed by version 0.6.
 
-| Review issue | Implemented in version 0.5 | Still required |
+| Review issue | Implemented in version 0.6 | Still required |
 | --- | --- | --- |
 | Title implies empirical CRC packets | Retitled to “NuMI-Calibrated Simulation and Far-Field Sensitivity”; abstract, methods, tables and conclusion call the CRC results a simulation | None for terminology |
 | Far-field source divergence is free | Far-field figures and captions consistently call out conditional geometric sensitivity; no source requirement is claimed | Published/simulated energy-angle flux and useful-neutrino power for a chosen facility |
@@ -16,7 +16,16 @@ long-baseline design or a new source-derived feasibility result. The original co
 | Coding/throughput is assumed | Rename as nominal bookkeeping; add Stancil's 0.37 bit/slot zero-background capacity as a theoretical reference; no FEC gain is claimed | Compare concrete finite-block codes at matched average energy and slot schedule |
 | Compression ratio is hypothetical | Keep 4:1 example explicitly secondary and unmeasured | Test compressor on an identified corpus |
 | Solar System prior art/units | Cite planetary-blockage discussion in [1]; Appendix reports peak one-slot power and explains long integration intervals | Body transmission, geometry and ephemeris simulation |
-| Reproducibility | README includes commands for scripts, tables, figures and tests; the draft PR head is an immutable Git commit that identifies this revision | Archive/release if an archival citation is needed |
+| Reproducibility | README pins the version 0.5 analysis scripts, generated CSVs and figures to commit `7dc09e25e9ad65383ff19733ab7f88fd38aa7b9d` and gives exact checkout and run commands | A DOI-backed archive may be added if a journal requires one |
+
+## Second-review disposition (version 0.6)
+
+- Source, propagation and receiver gaps remain explicit assumptions of the scoping study; no practical long-baseline feasibility claim is made.
+- The abstract now retains one packet result and one far-field reference case. The 60–72% interval is identified as input-mean sensitivity, not a joint confidence interval.
+- Table 1 identifies the rounded published `λ = 0.81`; Table 1b identifies the event-count estimate `λ̂ = 0.8118`.
+- The capacity comparison states that finite-packet accepted payload bits per scheduled slot and asymptotic bits per pulse are different quantities, not equivalent performance measurements.
+- The 1.64 bit/s example is labelled bookkeeping with assumed FEC/framing and no simulated decoder; 4:1 compression remains hypothetical.
+- The analysis snapshot is immutable at the commit cited in reference [11]; the updated manuscript text is version 0.6.
 
 ## Prioritized next analysis
 
