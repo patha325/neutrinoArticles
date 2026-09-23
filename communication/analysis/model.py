@@ -1,4 +1,4 @@
-"""Transparent, deliberately optimistic neutrino-link lower-bound model.
+"""Transparent geometric neutrino-link sensitivity model.
 Run: python model.py. No third-party dependencies.
 """
 import csv
@@ -51,6 +51,6 @@ def main():
                     w.writerow([length,mass,theta,EFF,round(joules/1e6,8),TARGET_BER])
     for r in benchmark: print('benchmark',r)
     for l in (1000,5000,12000):
-        print('lower bound',l, F*neutrino_energy_per_selected_event(l)/1e6,'MW neutrino beam at 1 bit/s')
+        print('conditional peak on-slot power',l, F*neutrino_energy_per_selected_event(l)/1e6,'MW at 1 slot/s')
 
 if __name__=='__main__':main()

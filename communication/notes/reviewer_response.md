@@ -1,36 +1,45 @@
-# Response to methodological review (working checklist)
+# Response to peer review (working checklist)
 
-The manuscript remains a scoping paper. The table separates revisions made
-from the additional evidence required for a full engineering feasibility claim.
+Version 0.5 is framed as a technical scoping note. It does not claim a
+long-baseline design or a new source-derived feasibility result. The original comments are addressed either in the revised scoping note or in the follow-up gates below. The remaining gates require a named source/receiver design or data unavailable in the demonstration paper; they are not results claimed by version 0.5.
 
-| Review issue | Revision in version 0.4 | Still required |
+| Review issue | Implemented in version 0.5 | Still required |
 | --- | --- | --- |
-| Undefined long-baseline source | Empirical NuMI benchmark isolated from hypothetical 3 GeV far-field geometry; 120 GeV on-pulse proton energy and published supercycle now tracked separately | Measured or published spectral angular flux, pointing and conversion from facility energy for a chosen long-baseline source |
-| Detector/cross section/propagation | Explicit T2K cross-section measurement and a labelled illustrative vacuum oscillation sensitivity; removed implication of physical lower bound | Three-flavor matter propagation with flux-weighted detector-specific cross section, selection and background uncertainties |
-| Unsupported payload number | 1.64 nominal bits/s clearly identified as bookkeeping; separate finite-message repeated-OOK/CRC-8 protocol simulated at measured NuMI link | Measured or source-specific finite-message performance with synchronization, realistic coding, message classes, dropouts and channel feedback |
-| Circular benchmark simulation | Figure 2 called an implementation check; published observed frame BER described and distinguished from generated counts | Digitize observed BER points with uncertainties or obtain run-level data to test the full decoder |
-| Planetary prior art | Appendix A now cites the 2012 paper's mention of planetary blockage and explains full on-slot duration in rate inversions | Beam/receiver and body-transmission simulation for an actual ephemeris |
-| Divergent applications | Submarine, finance and occultation treated as stress tests with named limitations | Independent source and detector design and end-to-end requirements for each use case |
+| Title implies empirical CRC packets | Retitled to “NuMI-Calibrated Simulation and Far-Field Sensitivity”; abstract, methods, tables and conclusion call the CRC results a simulation | None for terminology |
+| Far-field source divergence is free | Far-field figures and captions consistently call out conditional geometric sensitivity; no source requirement is claimed | Published/simulated energy-angle flux and useful-neutrino power for a chosen facility |
+| Detector represented by mass only | Limitations remain prominent; T2K iron cross section is only a comparison point, not a generic response | Actual projected geometry, material, efficiency, containment, backgrounds and flux fold |
+| Propagation omitted | Labeled vacuum two-flavor estimate retained only as a sensitivity illustration; reference [9] now has complete bibliographic details | Three-flavor matter propagation through a specified Earth profile and spectral source |
+| CRC packet results do not use measured event records | Wording corrected throughout; packet simulation uses the published count mean and pulse schedule but is not described as measured or as a decoder reproduction | Reconstruct observed counts/frame sync/code or obtain event-level data |
+| Input-mean uncertainty omitted | Re-estimate `lambda = 2×1402/3454`; propagate approximate Poisson 95% limits through repeated-message simulation; distinguish this from Monte Carlo uncertainty | Selection/systematic uncertainty and observed-data comparison |
+| Power/rate conventions unclear | Define slot duration/rate, raw OOK bit rate, peak on-slot power, full-duty average and input-weighted mean in Section 2; standardize equations, captions and plots | Apply a physical facility model to convert beam/facility input energy |
+| Pulse schedule averaged without phase | Simulate the published 25-pulse pattern, 2.2 s spacing and 6.267 s post-train interval; report latency over packet start phase. This matches the timing stated in Stancil et al. | None for the published nominal schedule; accelerator clock jitter and acquisition timing remain outside scope |
+| Coding/throughput is assumed | Rename as nominal bookkeeping; add Stancil's 0.37 bit/slot zero-background capacity as a theoretical reference; no FEC gain is claimed | Compare concrete finite-block codes at matched average energy and slot schedule |
+| Compression ratio is hypothetical | Keep 4:1 example explicitly secondary and unmeasured | Test compressor on an identified corpus |
+| Solar System prior art/units | Cite planetary-blockage discussion in [1]; Appendix reports peak one-slot power and explains long integration intervals | Body transmission, geometry and ephemeris simulation |
+| Reproducibility | README includes commands for scripts, tables, figures and tests; the draft PR head is an immutable Git commit that identifies this revision | Archive/release if an archival citation is needed |
 
 ## Prioritized next analysis
 
-1. Select a neutrino source with an angular and energy-resolved flux and a
-   published proton or muon input budget. Compute how many useful neutrinos
-   reach a stated detector, rather than assigning divergence independently.
-2. Fold three-flavor flavor evolution in a specified Earth density profile
-   with detector material, geometry, event selection and backgrounds.
-3. Simulate a complete source pulse schedule and finite messages. Compare OOK,
-   repetition and one sparse-pulse option at equal **average** facility energy,
-   recording packet reliability and acquisition time.
-4. Validate the model against experimental event distributions where accessible,
-   provide confidence intervals and repeat for a single use case.
+1. Choose a source with published energy- and angle-resolved flux and a proton
+   or muon input budget. Compute delivered flux at the receiver instead of
+   assigning divergence independently.
+2. Fold that spectrum through three-flavor oscillations and a stated Earth
+   density model, target material and detector response; include backgrounds
+   and uncertainties.
+3. Simulate complete messages on the real source timing at matched average
+   facility energy. Compare OOK/repetition with a finite-block code or sparse
+   pulse scheme, including acquisition and packet failure.
+4. Validate against observed detector counts where accessible. Keep submarine,
+   finance and occultation use cases out of feasibility claims until each has
+   an appropriate source and receiver model.
 
-## What the current packet example establishes
+## Packet simulation scope
 
-`empirical_message.py` samples uniform five-byte payloads with CRC-8/ATM.
-The receiver knows slot boundaries externally and declares on when any event
-appears across repeated on-symbol slots. It records undetected wrong payloads
-as well as correctly accepted packets. The on-pulse energy column is **proton
-beam energy to the target**; it is neither neutrino-carried energy nor facility
-electricity. The original 2012 study used a convolutional code and 64-bit
-synchronization word and reported a different decoded rate [1 in manuscript].
+`empirical_message.py` samples uniform five-byte payloads with CRC-8/ATM and
+one-sided missed detections derived from a Poisson mean. Packet timing uses
+the published 25-pulse supercycle and uniformly distributed issue phase.
+Receivers receive slot synchronization externally. It records exact correct
+acceptance, CRC acceptance, undetected errors, slot latency and proton-beam
+energy incident on the target. The input-mean interval reflects only Poisson
+counting statistics in the event count used by Stancil et al.; it does not
+cover selection systematics. This simulation is not the experiment's decoder.

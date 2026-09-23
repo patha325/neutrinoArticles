@@ -1,4 +1,4 @@
-chord_km,detector_kt,on_symbol_neutrino_MW,raw_symbols_per_s_at_1pct_uncoded_BER,assumed_FEC_rate,assumed_frame_payload_fraction,estimated_payload_bits_per_s_before_resends,illustrative_4_to_1_original_equivalent_bits_per_s
+chord_km,detector_kt,peak_neutrino_carried_on_slot_MW,raw_slots_per_s_at_1pct_uncoded_BER,assumed_FEC_rate,assumed_frame_payload_fraction,nominal_payload_bits_per_s_before_resends,illustrative_4_to_1_original_equivalent_bits_per_s
 1000,1,1,0.10245521,0.5,0.8,0.04098208,0.16392833
 1000,1,10,1.02455209,0.5,0.8,0.40982084,1.63928334
 1000,1,100,10.24552089,0.5,0.8,4.09820836,16.39283342
