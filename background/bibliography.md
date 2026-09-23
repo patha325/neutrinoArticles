@@ -28,3 +28,9 @@ This is the collection identified for the two article themes to date, not an exh
 - Extract actual beam energy–angle distributions, source-to-neutrino efficiency and duty cycle for a chosen design.
 - Replace the illustrative cross section and unity survival with energy-dependent sources and Earth propagation.
 - Compare experimental **decoded** throughput with the simulated **raw** error model on a matched protocol.
+
+## Deep-space low-rate protocol design (analogy, not neutrino performance evidence)
+
+12. J. I. Statman, “[Optimizing the Galileo Space Communication Link](https://ipnpr.jpl.nasa.gov/progress_report/42-116/116k.html),” *Interplanetary Network Progress Report* 42-116, 114–120 (1994). Compression, antenna arraying, coding and reprocessing on a weak radio link.
+13. B. Moision and J. Hamkins, “[Deep-Space Optical Communications Downlink Budget: Modulation and Coding](https://ipnpr.jpl.nasa.gov/progress_report/42-154/154K.html),” *Interplanetary Network Progress Report* 42-154, 1–28 (2003). Photon-counting capacity, PPM and error-control codes under power constraints.
+14. J. I. Statman et al., “[Decoder synchronization for deep space missions](https://ntrs.nasa.gov/citations/19940025161)” (1994). Frame and node acquisition at low rate and low SNR.

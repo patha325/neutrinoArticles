@@ -11,6 +11,10 @@ Neutrinos can cross substantial amounts of matter, making a direct communication
 
 **Keywords:** neutrino communication; through-Earth links; Poisson channel; accelerator beam; detector sensitivity; feasibility.
 
+![Figure 1: To-scale Earth cross-section and a 5,000 km through-Earth chord. The beam width is omitted; the diagram does not depict angular divergence.](../figures/01_earth_chord.png)
+
+**Figure 1.** A fixed-source example used to define chord length. The source and receiver lie on the surface; a real installation would require a beamline oriented along the chord.
+
 ## 1. Introduction
 
 Communication through rock or across a large terrestrial chord ordinarily requires an indirect route. Neutrino beams offer an unusual direct path because most neutrinos traverse matter without interacting. The same property makes reception difficult: very few transmitted particles generate identifiable events in a finite detector. Consequently, a beam that can be detected statistically need not carry a useful message at an acceptable error rate or cost.
@@ -77,6 +81,10 @@ The numerical calculation uses `m_u = 1.66053906660 × 10⁻²⁴ g` and `1 GeV 
 | 5 | 4.05 | 0.00871 | 0.00893 |
 | 9 | 7.29 | 0.000341 | 0.000355 |
 
+![Figure 2: Analytical raw bit-error probability and fixed-seed simulation versus independently pooled pulses.](../figures/02_pooled_pulses_ber.png)
+
+**Figure 2.** Idealized zero-background, synchronized on–off keying at the published selected-event mean, 0.81 per on-pulse. This is a model check, not a reproduction of the full experimental decoder.
+
 The simulation agrees with the analytical Bernoulli zero-count prediction at the shown precision. Five pulses give approximately 99.1% correct *uncoded synchronized bits* under these assumptions. This is consistent in scale with Stancil *et al.*'s statement that pooling five frames allowed 99% of transmitted bits to be decoded correctly, but frames and pulses are not interchangeable and this table is **not** an independent reproduction of their decoded 0.1 bit s⁻¹ performance [1].
 
 ### 4.2 Illustrative long-baseline sensitivity
@@ -88,6 +96,14 @@ Table 2 gives the full-duty-equivalent neutrino energy rate calculated from Eqs.
 | 1,000 km | 9.76 MW | 0.976 MW | 0.244 MW |
 | 5,000 km | 244 MW | 24.4 MW | 6.10 MW |
 | 12,000 km | 1,405 MW | 140.5 MW | 35.1 MW |
+
+![Figure 3: Illustrative full-duty-equivalent energy carried by neutrinos versus chord length for three detector masses.](../figures/03_energy_vs_chord.png)
+
+**Figure 3.** Far-field sensitivity under the explicit assumptions of Section 3.2. The logarithmic ordinate shows neutrino-carried energy rate, not accelerator input power.
+
+![Figure 4: Neutrino-carried energy-rate sensitivity to receiver mass and assumed divergence at 5,000 km.](../figures/04_mass_divergence_grid.png)
+
+**Figure 4.** This matrix visualizes nine of the 27 computed cases. The 0.1 mrad column is a mathematical sensitivity test; no source capable of that angular spread at 3 GeV has been demonstrated here.
 
 At fixed target mass and divergence, Eq. (4) implies `P_ν,full ∝ L² θ²/M`. The 10 kt, 5,000 km reference case is 24.4 MW at 1 mrad; setting the hypothetical divergence to 0.1 mrad changes this illustrative value to 0.244 MW, while 10 mrad changes it to 2,440 MW. Across all 27 calculated combinations, the smallest and largest entries are 0.00244 MW and approximately 140,549 MW, respectively. These extremes primarily reveal the leverage and danger of treating beam divergence as an unconstrained parameter. The complete grid is in [11].
 
@@ -101,7 +117,15 @@ The Fermilab demonstration establishes message transfer and supplies a measured 
 
 The relationship to [5] is methodological. Both studies require the analyst to separate a statistical detection score from a concrete operating point and to make detector geometry explicit. Passive submarine detection in [5] and active communication here have different energies, source control, backgrounds and receiver objectives. Direct citation to [5] should introduce this change of question and any legitimately reused methods, rather than imply that its antineutrino sensitivity numbers validate Eq. (5). Hallsjö's detector thesis [6] likewise motivates scrutiny of selection efficiency and interaction reconstruction but is not evidence that a 50% selected efficiency applies to the receiver postulated here.
 
-### 5.2 Limits of the first calculation
+### 5.2 Low-rate communication strategies from deep-space research
+
+A useful analogue comes from NASA/JPL's response to Galileo's failed high-gain antenna. Statman describes a revised low-gain link combining compression, arraying of ground antennas, convolutional and variable-redundancy Reed–Solomon coding, decoding feedback and reprocessing of recorded data [13]. These are system-level techniques for recovering useful information from a weak link. Their numerical radio-link gains cannot be transferred to a neutrino beam, but they sharpen the question this paper should ask: how much *verified payload* arrives per unit time and source energy after acquisition and error control?
+
+Moision and Hamkins analyze an optical photon-counting deep-space channel, jointly selecting pulse-position modulation (PPM) order and error-control code rate under average and peak power constraints [14]. Poisson event counting is the useful mathematical connection to Eq. (1). In the neutrino case, pulse timing, allowed accelerator patterns, beam-on energy, background and receiver dead time determine whether PPM or another sparse-pulse code can outperform simple on–off keying. No such gain is assumed in Tables 1–2. NASA/JPL's work on joint decoder and frame synchronization at extremely low data rates also supports treating symbol acquisition as a measured part of the link rather than granting it free of charge [15].
+
+For the next analysis, compare OOK, repetition with soft count combining, and one constrained PPM scheme using the **same** average source-energy budget and an explicit maximum pulse rate. For each scheme report detection, false acquisition, coding and framing overhead; packet success probability; and delivered information bits per second and per joule. Compression should be evaluated only on a specified source message distribution; random or already compressed payloads do not offer a free gain. Combining counts from multiple receivers is a possible analogue of antenna arraying only after their acceptance, timing and independence are modelled. Delay-tolerant networking may help carry an intermittent link's data end to end, but it does not increase the underlying detected-event rate and is outside this one-hop calculation.
+
+### 5.3 Limits of the first calculation
 
 **Source feasibility.** The strongest unverified assumption is the angular distribution of useful neutrinos at the selected energy. A genuine accelerator study must link pion or stored-muon production, focusing, decay geometry, proton or muon current, duty cycle, beam losses, and resulting energy–angle correlations. The generated flux must be integrated over the actual receiver footprint. Neutrino-carried energy is only one component of that calculation. The nuSTORM study [8] is a relevant source-design starting point.
 
@@ -115,7 +139,7 @@ The relationship to [5] is methodological. Both studies require the analyst to s
 
 ## 6. Work required for a submission-quality article
 
-The next revision should (i) select one specific source design and obtain its published flux and power inputs; (ii) implement spectral transport through a stated Earth density profile and an energy-dependent interaction model; (iii) choose a detector geometry and response curve; (iv) incorporate measured or defensibly projected background in synchronized time windows; and (v) simulate complete coded messages and compute delivered information per elapsed second and per joule of facility input. The 2012 experimental setup should then be reproduced as far as its published inputs permit, explicitly recording any inaccessible raw data. Finally, the resulting source–mass–rate feasibility contours should include uncertainty ranges and assumptions sufficient for independent reproduction.
+The next revision should (i) select one specific source design and obtain its published flux and power inputs; (ii) implement spectral transport through a stated Earth density profile and an energy-dependent interaction model; (iii) choose a detector geometry and response curve; (iv) incorporate measured or defensibly projected background in synchronized time windows; and (v) simulate complete coded messages, including an equal-energy OOK versus sparse-pulse comparison motivated by [13–15], and compute delivered information per elapsed second and per joule of facility input. The 2012 experimental setup should then be reproduced as far as its published inputs permit, explicitly recording any inaccessible raw data. Finally, the resulting source–mass–rate feasibility contours should include uncertainty ranges and assumptions sufficient for independent reproduction.
 
 These are material missing analyses, not editorial refinements. Until completed, the numerical power values in Table 2 should be presented only as a sensitivity map.
 
@@ -148,3 +172,9 @@ A verified experimental communication link exists, and the Poisson zero-count mo
 [11] S.-P. Hallsjö, *Direct through-Earth neutrino communication: reproducible scoping study*, accompanying `model.py`, `benchmark.csv` and `sensitivity.csv` (working files, 2026).
 
 [12] Hyper-Kamiokande Proto-Collaboration, *Hyper-Kamiokande Design Report* (2018). https://arxiv.org/abs/1805.04163
+
+[13] J. I. Statman, “Optimizing the Galileo Space Communication Link,” *Interplanetary Network Progress Report* **42-116**, 114–120 (1994). https://ipnpr.jpl.nasa.gov/progress_report/42-116/116k.html
+
+[14] B. Moision and J. Hamkins, “Deep-Space Optical Communications Downlink Budget: Modulation and Coding,” *Interplanetary Network Progress Report* **42-154**, 1–28 (2003). https://ipnpr.jpl.nasa.gov/progress_report/42-154/154K.html
+
+[15] J. I. Statman, K.-M. Cheung, T. H. Chauvin, J. Rabkin and M. L. Belongie, “Decoder synchronization for deep space missions” (1994), NASA Technical Reports Server ID 19940025161. https://ntrs.nasa.gov/citations/19940025161
