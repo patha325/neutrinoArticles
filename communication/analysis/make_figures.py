@@ -66,5 +66,44 @@ def design_grid():
     ax.set_title('5,000 km chord · 3 GeV · 1 raw symbol/s · 1% ideal BER')
     fig.tight_layout();save(fig,'04_mass_divergence_grid')
 
+def operating_points():
+    from tradeoffs import detector_kt
+    fig,ax=plt.subplots(figsize=(7.5,4.8))
+    power=np.geomspace(.1,10000,300)
+    for length,color in [(1000,'#467b59'),(5000,'#255e78'),(12000,'#ba4d3c')]:
+        ax.loglog(power,[detector_kt(length,p) for p in power],color=color,lw=2,label=f'{length:,} km chord')
+    for p in (1,10,100):
+        ax.axvline(p,color='#888',alpha=.25,ls=':')
+    ax.set(xlabel='Neutrino-carried power during an on symbol (MW)',ylabel='Required fiducial detector mass (kt)',xlim=(.1,10000),ylim=(.001,100000))
+    ax.grid(alpha=.25,which='both');ax.legend(frameon=False)
+    ax.text(.02,.025,'3 GeV · 1 mrad · 50% efficiency · 1 s on-symbol · 1% ideal raw BER\nNo accelerator conversion or background included',transform=ax.transAxes,fontsize=8,bbox={'facecolor':'white','edgecolor':'none','alpha':.9})
+    fig.tight_layout();save(fig,'05_detector_power_tradeoff')
+
+def finance_latency():
+    from tradeoffs import required_mw,latency_window_ms
+    fig,ax=plt.subplots(figsize=(7.5,4.8))
+    power=np.geomspace(1,100000,300)
+    delay=np.array([required_mw(5000,10)/p*1000 for p in power])
+    ax.loglog(power,delay,color='#255e78',lw=2.5,label='Ideal 1%-BER count-collection time')
+    limit=latency_window_ms(5000)
+    ax.axhline(limit,color='#ba4d3c',ls='--',lw=2,label=f'Ideal surface-fiber advantage: {limit:.2f} ms')
+    ax.fill_between(power,limit,100000,color='#ba4d3c',alpha=.08)
+    ax.set(xlabel='Neutrino-carried power during an on symbol (MW)',ylabel='Ideal on-symbol count-collection time (ms)',xlim=(1,100000),ylim=(.1,100000))
+    ax.grid(alpha=.25,which='both');ax.legend(frameon=False,loc='upper right')
+    ax.text(.02,.025,'5,000 km chord · 10 kt · 1 mrad · 3 GeV\nFiber: shortest surface arc, group index 1.4677; no routing or processing',transform=ax.transAxes,fontsize=8,bbox={'facecolor':'white','edgecolor':'none','alpha':.9})
+    fig.tight_layout();save(fig,'06_ideal_finance_latency')
+
+def payload_budget():
+    from throughput import raw_symbols_per_s,payload_bits_per_s
+    fig,ax=plt.subplots(figsize=(7.5,4.8))
+    length=np.linspace(1000,12000,300)
+    for power,color in [(1,'#467b59'),(10,'#255e78'),(100,'#ba4d3c')]:
+        rates=[payload_bits_per_s(l,10,power) for l in length]
+        ax.plot(length,rates,color=color,lw=2,label=f'{power} MW on-symbol neutrino power')
+    ax.set(yscale='log',xlabel='Through-Earth chord length (km)',ylabel='Illustrative payload rate (bit/s)',xlim=(1000,12000))
+    ax.grid(alpha=.25,which='both');ax.legend(frameon=False)
+    ax.text(.02,.025,'10 kt · 1 mrad · 3 GeV · 1% ideal uncoded BER\nAssumed FEC code rate 1/2; frame payload fraction 0.8\nNo code gain, retransmissions or acquisition modelled',transform=ax.transAxes,fontsize=8,bbox={'facecolor':'white','edgecolor':'none','alpha':.9})
+    fig.tight_layout();save(fig,'07_illustrative_payload_rate')
+
 if __name__=='__main__':
-    geometry();benchmark();sensitivity();design_grid()
+    geometry();benchmark();sensitivity();design_grid();operating_points();finance_latency();payload_budget()

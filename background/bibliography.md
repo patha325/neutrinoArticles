@@ -34,3 +34,16 @@ This is the collection identified for the two article themes to date, not an exh
 12. J. I. Statman, “[Optimizing the Galileo Space Communication Link](https://ipnpr.jpl.nasa.gov/progress_report/42-116/116k.html),” *Interplanetary Network Progress Report* 42-116, 114–120 (1994). Compression, antenna arraying, coding and reprocessing on a weak radio link.
 13. B. Moision and J. Hamkins, “[Deep-Space Optical Communications Downlink Budget: Modulation and Coding](https://ipnpr.jpl.nasa.gov/progress_report/42-154/154K.html),” *Interplanetary Network Progress Report* 42-154, 1–28 (2003). Photon-counting capacity, PPM and error-control codes under power constraints.
 14. J. I. Statman et al., “[Decoder synchronization for deep space missions](https://ntrs.nasa.gov/citations/19940025161)” (1994). Frame and node acquisition at low rate and low SNR.
+
+## Original global concept, applications and propagation inputs
+
+15. A. W. Sáenz et al., “[Telecommunication with neutrino beams](https://doi.org/10.1126/science.198.4314.295),” *Science* 198, 295–297 (1977). Early quantitative global-link proposal; must be discussed in any novelty claim.
+16. M. Karzand and L. R. Varshney, “[Communication Strategies for Low-Latency Trading](https://arxiv.org/abs/1504.07227)” (2015). Reliability–latency trade-off in short trading signals.
+17. G. Laughlin, A. Aguirre and J. Grundfest, “[Information Transmission Between Financial Markets in Chicago and New York](https://arxiv.org/abs/1302.5966)” (2013). Measured historical effects of fiber and microwave links.
+18. Corning, “[SMF-28e+ Photonic Optical Fiber](https://www.corning.com/media/worldwide/csm/documents/Corning%20SMF28e%2B%C2%AE%20Photonic%20Specialty%20Fiber.pdf),” nominal 1550 nm group index 1.4677 used only in an illustrative propagation comparison.
+
+## Source compression and channel coding
+
+19. CCSDS, “[Lossless Data Compression](https://ccsds.org/Pubs/121x0b3.pdf),” CCSDS 121.0-B-3 (2020). A documented lossless telemetry compressor; applicability and achieved ratio depend on data.
+20. CCSDS, “[TM Synchronization and Channel Coding](https://ccsds.org/view/bluebooks/entry/4803/),” CCSDS 131.0-B-6 (2026). Channel coding and synchronization reference, not neutrino-specific performance.
+21. Y. Collet and M. Kucherawy, “[Zstandard Compression and the 'application/zstd' Media Type](https://datatracker.ietf.org/doc/html/rfc8878),” RFC 8878 (2021). General lossless format with dictionary option.

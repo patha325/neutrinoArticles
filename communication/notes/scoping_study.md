@@ -69,3 +69,7 @@ At fixed mass and divergence the result grows with the *square* of baseline. A t
 4. Implement nonzero-background optimal likelihood threshold, time acquisition, realistic synchronization, message framing, coding, outages and confidence intervals. Benchmark complete payload throughput against Stancil's published protocol, avoiding confusion between raw and decoded rates.
 5. Sensitivity and uncertainty: beam energy spectrum, divergence, flavor survival, reconstruction efficiency, backgrounds, power conversion, 1/10/40 kt masses and multiple rates. Compare fixed site links and mobile receivers separately.
 6. Review all references forward and backward, deposit model code and parameter manifest, and have the physics and communications calculations independently checked before any publication claim.
+
+## Revision 0.2: detector, submarine and latency extensions
+
+`analysis/tradeoffs.py` and the CSV files `data/power_detector_tradeoff.csv` and `data/latency_example.csv` invert the same conditional model. At a 5,000 km chord and 1 mrad, a one-second on symbol has `P_neutrino(MW) × M(kt) ≈ 244 MW·kt` at ideal 1% raw BER; 10 kt and 1 ms imply 24.4 GW carried by neutrinos. The conventional-fiber comparison uses a hypothetical geometry and Corning 1550 nm group index 1.4677, not a measured financial route. See the manuscript for the full assumptions and literature context.
