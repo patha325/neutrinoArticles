@@ -1,4 +1,4 @@
-chord_km,beam_half_angle_mrad,neutrino_energy_GeV,selected_efficiency,target_raw_BER,on_symbol_duration_s,neutrino_carried_on_symbol_MW,required_detector_kt
+chord_km,beam_half_angle_mrad,neutrino_energy_GeV,selected_efficiency,target_raw_BER,slot_duration_s,peak_neutrino_carried_on_slot_MW,required_detector_kt
 1000,1,3,0.5,0.01,1,1,9.760363
 1000,1,3,0.5,0.01,1,10,0.976036
 1000,1,3,0.5,0.01,1,100,0.097604

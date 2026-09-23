@@ -1,7 +1,7 @@
 """Geometric extrapolation of the manuscript's idealized neutrino count model.
 
 Run from repository root: python communication/analysis/solar_system_scaling.py
-The output is neutrino-carried, full-duty-equivalent on-symbol power; no
+The output is peak neutrino-carried power during one-second on slots; no
 source conversion, attenuation, oscillations, backgrounds, or coding are used.
 """
 import csv
@@ -33,7 +33,7 @@ def main():
     output = Path(__file__).resolve().parent.parent / "data" / "solar_system_scaling.csv"
     with output.open("w", newline="") as stream:
         writer = csv.writer(stream)
-        writer.writerow(("scenario", "baseline_km", "neutrino_on_symbol_MW_for_1_raw_symbol_s", "vacuum_flight_s"))
+        writer.writerow(("scenario", "baseline_km", "peak_neutrino_on_slot_MW_at_1_slot_s", "vacuum_flight_s"))
         writer.writerows(rows())
     print(output)
 
