@@ -1,13 +1,13 @@
 # Direct Neutrino Communication Through the Earth: NuMI-Calibrated Simulation and Far-Field Sensitivity
 
 **Sven-Patrik Hallsjö**  
-**Working manuscript, version 0.6 — 23 September 2026**
+**Working manuscript, version 0.7 — 24 September 2026**
 
 > **Status.** This technical scoping study combines a packet simulation calibrated to the NuMI–MINERvA selected-event mean with a separate, deliberately simplified geometric sensitivity calculation. The simulated packets were not experimentally transmitted. The study has not established a source–detector design for a long-baseline link. Far-field figures use energy carried by neutrinos, **not proton beam power or facility electricity**; the NuMI-derived proton energy estimate describes the published target run and must not be substituted into the far-field model.
 
 ## Abstract
 
-Neutrinos can pass through substantial matter, potentially enabling direct links where electromagnetic paths are obstructed, but their weak interactions make reception difficult. We present two separate calculations. First, a repeated OOK/CRC simulation calibrated to the published NuMI–MINERvA selected-event mean correctly accepts 65.7% of simulated 40-bit packets after five repetitions, with about 587 s mean latency under assumed external synchronization. Varying the input mean across its approximate Poisson counting interval gives 60–72% correct acceptance; this is a sensitivity range, not a joint confidence interval. Second, a distinct idealized far-field model gives 24.4 MW peak neutrino-carried on-slot power for a 10 kt receiver at 5,000 km, conditional on 3 GeV neutrinos, 1 mrad divergence, 50% selection efficiency, unit flavor survival, zero background and one-second slots. Neither result establishes a practical long-baseline source or measured CRC performance.
+Neutrinos can pass through substantial matter, potentially enabling direct links where electromagnetic paths are obstructed, but their weak interactions make reception difficult. We present two separate calculations. First, a repeated OOK/CRC simulation calibrated to the published NuMI–MINERvA selected-event mean correctly accepts 65.7% of simulated packets with a 40-bit payload and an eight-bit CRC after five repetitions, with about 587 s mean latency under assumed external synchronization. Varying the input mean across its approximate Poisson counting interval gives 60–72% correct acceptance; this is a sensitivity range, not a joint confidence interval. Second, a distinct idealized far-field model gives 24.4 MW peak neutrino-carried on-slot power for a 10 kt receiver at 5,000 km, conditional on 3 GeV neutrinos, 1 mrad divergence, 50% selection efficiency, unit flavor survival, zero background and one-second slots. Neither result establishes a practical long-baseline source or measured CRC performance.
 
 **Keywords:** neutrino communication; through-Earth links; Poisson channel; accelerator beam; detector sensitivity; feasibility.
 
@@ -17,7 +17,9 @@ Neutrinos can pass through substantial matter, potentially enabling direct links
 
 ## 1. Introduction
 
-Communication through rock or across a large terrestrial chord ordinarily requires an indirect route. Neutrino beams offer an unusual direct path because most neutrinos traverse matter without interacting. The same property makes reception difficult: very few transmitted particles generate identifiable events in a finite detector. Consequently, a beam that can be detected statistically need not carry a useful message at an acceptable error rate or cost.
+Communication through rock or across a large terrestrial chord ordinarily requires an indirect route, such as a surface relay or infrastructure that crosses the barrier. A neutrino beam offers a physically distinct direct path because most neutrinos traverse matter without interacting. This property could matter in a narrowly defined setting where a direct path has operational value and an electromagnetic relay is unavailable, obstructed or too slow to deploy. It does not make neutrinos generally preferable: their weak interactions mean that only a small fraction of transmitted particles produce identifiable events, so a detectable beam need not deliver a useful message at acceptable rate, energy cost or receiver scale.
+
+The research motivation is therefore quantitative. Earlier work established the concept and a short experimental link, but those results do not by themselves show how measured event statistics translate into a finite message protocol, or how the event requirement scales when baseline, beam spread and detector mass change. This scoping study makes those steps explicit under deliberately idealized assumptions, so that the dominant penalties and missing physical inputs are visible before anyone treats an application example as an engineering proposal. Its purpose is to delimit the question and identify what a source-specific study would need to calculate; it does not argue that a practical use case has already been found.
 
 The possibility has passed an experimental proof-of-principle test. Stancil *et al.* transmitted an encoded message using the NuMI beam and MINERvA detector over 1.035 km, including 240 m of earth. They report a decoded rate of 0.1 bit s⁻¹ and a 1% bit error rate [1]. That result establishes a link at its particular source, geometry, detector and decoding protocol; it does not answer whether a regional or global direct link could be operated at a useful rate.
 
@@ -253,7 +255,7 @@ These are material missing analyses, not editorial refinements. Until completed,
 
 ## 7. Conclusion
 
-The experimental anchor is Stancil *et al.*'s demonstrated 1.035 km link [1]. In our separate simulation calibrated to its selected-event mean, five repeated slots and CRC correctly accept 65.7% of 40-bit messages on average; modeled mean packet latency is 587 s with a 582–591 s phase range. The estimated Poisson uncertainty in the input mean shifts this acceptance to about 60–72%. These are simulated outcomes under known synchronization, not packet measurements or a recreation of the original decoder.
+The experimental anchor is Stancil *et al.*'s demonstrated 1.035 km link [1]. In our separate simulation calibrated to its selected-event mean, five repeated slots and CRC correctly accept 65.7% of simulated packets carrying a 40-bit payload on average; modeled mean packet latency is 587 s with a 582–591 s phase range. The estimated Poisson uncertainty in the input mean shifts this acceptance to about 60–72%. These are simulated outcomes under known synchronization, not packet measurements or a recreation of the original decoder.
 
 The independent far-field model remains a geometric sensitivity calculation. Its headline 5,000 km result—**24.4 MW peak neutrino-carried power during on slots** for a 10 kt receiver—is conditional on 3 GeV monoenergetic neutrinos, 1 mrad divergence, 50% selected efficiency, unit flavor survival, zero background, and one-second slots (1 slot/s). For equiprobable uncoded OOK, average power is half the peak. No source–detector installation meeting these assumptions has been established.
 
