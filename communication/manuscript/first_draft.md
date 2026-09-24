@@ -1,6 +1,9 @@
 # Direct Neutrino Communication Through the Earth: NuMI-Calibrated Simulation and Far-Field Sensitivity
 
-**Sven-Patrik Hallsjö**  
+**Dr. Sven-Patrik Hallsjö**  
+Independent researcher, Stockholm, Sweden  
+patrik.hallsjo@gmail.com  
+September 2026  
 
 
 ## Abstract
@@ -339,4 +342,3 @@ For an engineering comparison, define a message size, deadline and acceptable fa
 [24] NASA/JPL, “What's Mars Solar Conjunction, and Why Does It Matter?” (2019). https://www.jpl.nasa.gov/news/whats-mars-solar-conjunction-and-why-does-it-matter/
 
 [25] NASA Technical Reports Server, “Lagrange-Based Options for Relay Satellites to Eliminate Earth-Mars Communications Outages During Solar Superior Conjunctions” (2020). https://ntrs.nasa.gov/citations/20205007788
-

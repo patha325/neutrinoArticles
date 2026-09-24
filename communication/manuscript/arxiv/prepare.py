@@ -12,10 +12,10 @@ text = SOURCE.read_text(encoding="utf-8")
 lines = text.splitlines()
 title = lines[0][2:].strip()
 
-# Keep the author line, but remove the working-draft label and status box.
-lines = [line for line in lines if not line.startswith("**Working manuscript,")]
-lines = [line for line in lines if line != f"**{'Sven-Patrik Hallsjö'}**  "]
-lines = [line for line in lines if line != f"# {title}"]
+# Skip the title-page metadata block in the Markdown body; Pandoc receives a
+# separately formatted title block below.
+abstract_start = next(i for i, line in enumerate(lines) if line == "## Abstract")
+lines = lines[abstract_start:]
 text = "\n".join(lines) + "\n"
 text = re.sub(r"\n> \*\*Status\.\*\*.*?(?=\n\n)", "", text, count=1, flags=re.S)
 text = re.sub(r"commit `([0-9a-f]{40})`", r"commit \1", text)
@@ -132,6 +132,7 @@ for i in range(1, 8):
     shutil.copy2(ROOT / "src" / "figures" / f"0{i}.png", SUBMISSION / "figures" / f"0{i}.png")
 
 header = r'''\usepackage[margin=1in]{geometry}
+\usepackage{authblk}
 \usepackage{caption}
 \usepackage{float}
 \usepackage{xurl}
@@ -145,10 +146,20 @@ subprocess.run(
     ["pandoc", str(WORK / "paper.md"), "--from=markdown+tex_math_dollars+pipe_tables+implicit_figures",
      "--to=latex", "--standalone", "--top-level-division=section",
      "--metadata", f"title={title}",
-     "--metadata", "author=Sven-Patrik Hallsjö", "--metadata", "date=",
+     "--metadata", "author=Dr. Sven-Patrik Hallsjö", "--metadata", "date=Dated: September 2026",
      "-H", str(WORK / "header.tex"), "-o", str(output)],
     check=True,
 )
+
+# Match the title-page author block used in the author's earlier arXiv paper.
+tex = output.read_text(encoding="utf-8")
+tex = tex.replace(
+    r"\author{Dr. Sven-Patrik Hallsjö}",
+    r"\author[1]{Dr. Sven-Patrik Hallsjö\thanks{\texttt{patrik.hallsjo@gmail.com}}}" + "\n"
+    + r"\affil[1]{Independent researcher, Stockholm, Sweden}",
+    1,
+)
+output.write_text(tex, encoding="utf-8")
 
 readme = '''Source for “%s”.\n\nCompile main.tex with XeLaTeX (run twice for references). The seven required PNG figures are in figures/. The author is formatted as in the author's earlier arXiv paper.\n''' % title
 (SUBMISSION / "README.txt").write_text(readme, encoding="utf-8")
