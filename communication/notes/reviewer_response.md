@@ -1,9 +1,9 @@
 # Response to peer review (working checklist)
 
-Version 0.6 is framed as a technical scoping note. It does not claim a
-long-baseline design or a new source-derived feasibility result. The original comments are addressed either in the revised scoping note or in the follow-up gates below. The remaining gates require a named source/receiver design or data unavailable in the demonstration paper; they are not results claimed by version 0.6.
+Version 0.7 is framed as a technical scoping note. It does not claim a
+long-baseline design or a new source-derived feasibility result. The original comments are addressed either in the revised scoping note or in the follow-up gates below. The remaining gates require a named source/receiver design or data unavailable in the demonstration paper; they are not results claimed by version 0.7.
 
-| Review issue | Implemented in version 0.6 | Still required |
+| Review issue | Implemented in version 0.7 | Still required |
 | --- | --- | --- |
 | Title implies empirical CRC packets | Retitled to “NuMI-Calibrated Simulation and Far-Field Sensitivity”; abstract, methods, tables and conclusion call the CRC results a simulation | None for terminology |
 | Far-field source divergence is free | Far-field figures and captions consistently call out conditional geometric sensitivity; no source requirement is claimed | Published/simulated energy-angle flux and useful-neutrino power for a chosen facility |
@@ -25,7 +25,7 @@ long-baseline design or a new source-derived feasibility result. The original co
 - Table 1 identifies the rounded published `λ = 0.81`; Table 1b identifies the event-count estimate `λ̂ = 0.8118`.
 - The capacity comparison states that finite-packet accepted payload bits per scheduled slot and asymptotic bits per pulse are different quantities, not equivalent performance measurements.
 - The 1.64 bit/s example is labelled bookkeeping with assumed FEC/framing and no simulated decoder; 4:1 compression remains hypothetical.
-- The analysis snapshot is immutable at the commit cited in reference [11]; the updated manuscript text is version 0.6.
+- The analysis snapshot is immutable at the commit cited in reference [11]; the version 0.6 manuscript text is pinned to the reproducible analysis snapshot.
 
 ## Prioritized next analysis
 
@@ -52,3 +52,10 @@ acceptance, CRC acceptance, undetected errors, slot latency and proton-beam
 energy incident on the target. The input-mean interval reflects only Poisson
 counting statistics in the event count used by Stancil et al.; it does not
 cover selection systematics. This simulation is not the experiment's decoder.
+
+
+## Fourth-review disposition (version 0.7)
+
+- The introduction now motivates the work through the specific trade-off: a direct path through obstructing matter is potentially useful only in narrow settings, while weak interaction makes data delivery costly. It states the gap between prior proposals/proof of principle and the quantitative accounting performed here, and explains the scoping study's decision-useful role without asserting a practical application.
+- The abstract now says “packets with a 40-bit payload and an eight-bit CRC,” distinguishing payload length from transmitted packet length. The conclusion uses the same distinction.
+- Source flux, three-flavor propagation and detector response remain out of scope; the 24.4 MW example remains a conditional geometric sensitivity, not a source requirement.
