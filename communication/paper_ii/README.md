@@ -19,7 +19,8 @@ The measured NuMI–MINERvA communication demonstration is a validation referenc
 
 ## Manuscript
 
-- [paper_ii_draft.md](paper_ii_draft.md) — current manuscript draft and model definitions.
+- [paper_ii_draft.md](manuscript/paper_ii_draft.md) — current manuscript draft and model definitions.
+- [proposal.md](proposal.md) — research proposal connecting Paper II to the few-event capacity and coding study.
 
 ## Result gate
 
