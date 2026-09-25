@@ -1,0 +1,27 @@
+{
+  "source": "DUNE TDR GLoBES FHC far-detector flux (G4LBNF v3r5p4, 2017 optimized engineered beam)",
+  "flux_reference_distance_km": 1297.0,
+  "oscillation_baseline_km": 1284.9,
+  "flux_reference_vs_oscillation_baseline_difference_km": 12.099999999999909,
+  "earth_density_model": "PREM radial profile, midpoint-segmented at max 5 km",
+  "mean_prem_density_g_cm3": 3.059141381582957,
+  "constant_density_crosscheck_g_cm3": 2.848,
+  "fiducial_mass_kt": 40.0,
+  "beam_power_mw": 1.2,
+  "proton_energy_gev": 120.0,
+  "nominal_pot_per_year": 1.1e+21,
+  "selected_numu_cc_events_per_pot_40kt": 2.457164273701879e-18,
+  "selected_numu_cc_events_per_year_40kt": 2702.880701072067,
+  "selected_numu_cc_events_per_second_40kt_calendar_average": 8.564912100641579e-05,
+  "calendar_average_pot_per_second": 34856896595431.844,
+  "selected_numu_cc_events_per_year_constant_density": 2704.9366054973975,
+  "assumptions": [
+    "The FD flux file includes G4LBNF beamline and geometric flux prediction but no oscillation probability.",
+    "Flux plane is 1297 km from Horn 1 in this file; oscillations use the official 1284.9 km GLoBES baseline.",
+    "Only nu_mu CC signal is counted; other flavors, NC, detector-specific cosmic backgrounds, migration smearing, and systematic correlations are omitted.",
+    "DUNE post-selection efficiency is applied directly at true energy as a first-order proxy, not as the full reconstructed-energy response.",
+    "Beam exposure is annual POT divided by calendar-year seconds; no pulse schedule, uptime profile, or rapid beam modulation is modeled.",
+    "Background means of 0 and 0.01 per symbol are communication-channel sensitivity scenarios, not DUNE background predictions.",
+    "Energy per delivered bit is proton-beam energy only; wall-plug or accelerator electrical energy is not estimated."
+  ]
+}
