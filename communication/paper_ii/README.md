@@ -2,7 +2,7 @@
 
 **Title:** *End-to-End Simulation of a Neutrino Communication Channel Through the Earth*
 
-This package now contains a runnable DUNE benchmark, seven generated figures, CSV/JSON outputs, and a revised article draft. The benchmark uses public DUNE TDR inputs. Its rate is source-folded for a 40 kt far detector, but detector migration, spill timing, communication backgrounds, and synchronization acquisition are not modeled. Results should be read with the assumptions in the article and `data/simulation/simulation_summary.json`.
+This package now contains a runnable DUNE benchmark, seven generated figures, CSV/JSON outputs, and a revised article draft. The benchmark uses public DUNE TDR inputs. Its rate is source-folded for a 40 kt far detector, but detector migration, spill timing, communication backgrounds, and synchronization acquisition are not modeled. The rounded headline is a conditional benchmark, not a detector prediction: no physical uncertainties are propagated, the reconstructed-energy efficiency is used against true energy, and the flux-plane/baseline mapping is unconfirmed. Results should be read with the assumptions in the article and `data/simulation/simulation_summary.json`.
 
 ## Contents
 
