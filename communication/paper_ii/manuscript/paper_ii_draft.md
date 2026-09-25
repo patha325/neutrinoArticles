@@ -209,7 +209,7 @@ Paper II is designed to replace a conditional event-rate parameter with a reprod
 
 [3] C. Andreopoulos *et al.*, “The GENIE Neutrino Monte Carlo Generator,” *Nuclear Instruments and Methods in Physics Research A* **614**, 87–104 (2010). https://doi.org/10.1016/j.nima.2009.12.009 ; https://arxiv.org/abs/0905.2517
 
-[4] T. Ohlsson, “Neutrino oscillations with three flavors in matter: Applications to neutrinos traversing the Earth,” *Physics Letters B* **486**, 19–26 (2000). https://doi.org/10.1016/S0370-2693(00)00741-2 ; https://arxiv.org/abs/hep-ph/9912295
+[4] T. Ohlsson, “Neutrino oscillations with three flavors in matter: Applications to neutrinos traversing the Earth,” *Physics Letters B* **486**, 19–26 (2000). https://doi.org/10.1016/S0370-2693(00)00008-3 ; https://arxiv.org/abs/hep-ph/9912295
 
 [5] P. B. Denton and R. Pestes, “Neutrino Oscillations through the Earth's Core,” *Physical Review D* **104**, 113007 (2021). https://doi.org/10.1103/PhysRevD.104.113007 ; https://arxiv.org/abs/2110.01148
 
