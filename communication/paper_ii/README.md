@@ -2,26 +2,28 @@
 
 **Title:** *End-to-End Simulation of a Neutrino Communication Channel Through the Earth*
 
-This folder contains the new source-to-decoder follow-up to Paper I. The manuscript is currently a methods draft, not a submission-ready paper. It deliberately contains no long-baseline numerical claim because the source configuration and detector response have not yet been fixed and validated.
+This package now contains a runnable first benchmark, five generated figures, CSV/JSON outputs, and an initial article draft. The benchmark uses public DUNE TDR inputs. Its rate is source-folded for a 40 kt far detector, but detector migration, spill timing, communication backgrounds, and synchronization acquisition are not modeled. Results should be read with the assumptions in the article and `data/simulation/simulation_summary.json`.
 
-## Scope
+## Contents
 
-The analysis will replace Paper I's conditional event-rate input with:
+- [Article draft](manuscript/paper_ii_article_draft.md) — v0.1 with methods, benchmark results, limits, and next steps.
+- [Research proposal](proposal.md) — linked Paper II and future few-event capacity/coding study.
+- [Methods draft](manuscript/paper_ii_draft.md) — the prior model plan and definitions.
+- `analysis/neutrino_channel.py` — PREM and three-flavor evolution, binned rate fold, Poisson channels, and packet simulation.
+- `analysis/run_simulation.py` — reproducible CSV/JSON and figure generation.
+- `analysis/test_neutrino_channel.py` — numerical invariants and limiting-case checks.
+- `data/inputs/` — public DUNE text inputs and [provenance](data/inputs/PROVENANCE.md).
+- `data/simulation/` — folded spectrum, slot scale, coding sweep, finite packet outcomes, and assumption summary.
+- `figures/` — SVG figures for the manuscript and PNG previews.
 
-1. an explicit energy- and angle-resolved accelerator-neutrino source;
-2. geometric transport and three-flavor matter propagation through a stated Earth density profile;
-3. interaction cross sections folded with detector geometry, material, and selection efficiency;
-4. time-dependent signal and background counts in actual communication slots;
-5. synchronization, framing, finite-block decoding, and complete-message outcomes;
-6. facility-input energy per successfully delivered payload bit.
+## Reproduce
 
-The measured NuMI–MINERvA communication demonstration is a validation reference only where the published inputs permit. It will not be described as a reproduction of its full decoder without the required event, timing, and protocol inputs.
+```bash
+python -m pip install -r communication/paper_ii/analysis/requirements.txt
+python communication/paper_ii/analysis/run_simulation.py
+python -m unittest discover -s communication/paper_ii/analysis -p 'test_*.py'
+```
 
-## Manuscript
+The source is a DUNE TDR FHC far-detector flux histogram. PREM propagation is integrated within each flux-energy bin using Gaussian quadrature. DUNE's published selection efficiency is applied directly against true energy as a proxy because this first pass does not fold the full migration matrix. Calendar-average exposure is used for slot-duration illustrations. Background scenarios are assumptions, not predictions. No accelerator electrical energy or achieved communications rate is claimed.
 
-- [paper_ii_draft.md](manuscript/paper_ii_draft.md) — current manuscript draft and model definitions.
-- [proposal.md](proposal.md) — research proposal connecting Paper II to the few-event capacity and coding study.
-
-## Result gate
-
-No result may be described as source-derived until the repository contains a versioned source flux input and provenance, a detector response definition, a propagation implementation with numerical checks, background assumptions, and a decoder run that emits complete-message metrics. All rate, energy, and power terms must retain the distinctions defined in the manuscript.
+Paper II uses a simple physical channel and decoder baseline. *The Neutrino Channel: Capacity and Coding in the Few-Event Regime* remains a distinct follow-on study that can reuse this channel model for its more detailed coding analysis.
