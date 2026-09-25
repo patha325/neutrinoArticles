@@ -7,7 +7,7 @@
 1. **Paper II:** *End-to-End Simulation of a Neutrino Communication Channel Through the Earth*
 2. **Follow-on information-theory study:** *The Neutrino Channel: Capacity and Coding in the Few-Event Regime*
 
-**Status:** Research proposal draft. The source and receiver configuration for Paper II remains to be selected; no new source-derived performance result is claimed here.
+**Status:** Research proposal draft. A first reproducible benchmark has been selected from public DUNE TDR inputs. Initial source-folded results and limits are summarized in [proposal_update.md](proposal_update.md) and the [Paper II article draft](manuscript/paper_ii_article_draft.md). The benchmark is not a complete spill-level or end-to-end communications simulation.
 
 ## 1. Summary
 
