@@ -1,0 +1,9 @@
+# Proposal update: benchmark selected and first model results
+
+The proposal's initial source-selection gate is now met for a first reproducible benchmark: the DUNE TDR G4LBNF v3r5p4 FHC far-detector flux, the associated GENIE CC cross-section table and GLoBES response inputs, a 40 kt fiducial-mass receiver, and the public 1284.9 km oscillation baseline. This choice provides open, versioned inputs for the source-to-count calculation; it is a simulation benchmark and does not imply a proposed DUNE operating mode for communication.
+
+The first-pass fold includes three-flavor matter evolution through PREM, 12-point Gaussian integration within each 250 MeV flux bin, CC interactions, and a true-energy efficiency proxy. It gives (2.4572\times10^{-18}) selected \(\nu_\mu\) CC events per POT, approximately 2703 selected events per 40 kt exposure-year, and a continuous-exposure calendar mean of (8.56\times10^{-5}\) selected events per second. This is enough to establish the order of magnitude and generate reproducible sparse-event decoder experiments.
+
+The model does not yet meet the original full-system result gate. The reconstructed-energy migration matrix is omitted; spill timing, beam duty/uptime, communication-background measurements, event time stamping, synchronization acquisition, and a complete decoder protocol remain to be implemented. The packet experiment assumes externally supplied symbol timing. A next proposal revision should prioritize restoring the full migration response and spill-level live-time before adding uncertainty propagation and facility-input energy analysis.
+
+Paper II and the proposed capacity/coding paper remain separate. Paper II supplies the physics-based event-count channel and baseline decoders. The follow-on *The Neutrino Channel: Capacity and Coding in the Few-Event Regime* studies capacity and practical finite-block coding on a channel law declared from Paper II.
