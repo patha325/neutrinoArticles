@@ -234,7 +234,8 @@ def selected_spectrum_per_pot(flux: np.ndarray | None = None,
                               baseline_km: float = 1284.9,
                               fiducial_mass_kt: float = 40.0,
                               density_model: str = "prem",
-                              max_step_km: float = 5.0
+                              max_step_km: float = 5.0,
+                              quadrature_order: int = 12
                               ) -> dict[str, np.ndarray | float]:
     """Fold DUNE FHC nu_mu flux through P(mu->mu), CC xsec, and DUNE efficiency.
 
@@ -255,7 +256,9 @@ def selected_spectrum_per_pot(flux: np.ndarray | None = None,
     edges[1:-1] = 0.5 * (energy[:-1] + energy[1:])
     edges[0] = max(0.0, energy[0] - 0.5 * (energy[1] - energy[0]))
     edges[-1] = energy[-1] + 0.5 * (energy[-1] - energy[-2])
-    nodes, weights = np.polynomial.legendre.leggauss(12)
+    if quadrature_order < 2:
+        raise ValueError("quadrature_order must be at least 2")
+    nodes, weights = np.polynomial.legendre.leggauss(quadrature_order)
     halfwidth = 0.5 * np.diff(edges)
     quad_energy = (energy[:, None] + halfwidth[:, None] * nodes[None, :]).ravel()
     quad_weights = np.broadcast_to(halfwidth[:, None] * weights[None, :],
@@ -268,7 +271,9 @@ def selected_spectrum_per_pot(flux: np.ndarray | None = None,
         energy, baseline_km, density_model=density_model, max_step_km=max_step_km
     )
     p_mumu_center = center_probs[:, 1, 1]
-    p_mumu = np.sum(p_mumu_quad * quad_weights.reshape(len(energy), len(nodes)), axis=1) / np.diff(edges)
+    p_mumu = np.sum(
+        p_mumu_quad * quad_weights.reshape(len(energy), len(nodes)), axis=1
+    ) / np.diff(edges)
     reco_centers, efficiency_values = parse_reco_efficiency()
     efficiency = np.interp(energy, reco_centers, efficiency_values, left=0.0, right=0.0)
     quad_efficiency = np.interp(quad_energy, reco_centers, efficiency_values,
