@@ -4,7 +4,7 @@
 
 ## Abstract
 
-We present a DUNE-based source-to-count benchmark and finite-decoder study for a neutrino counting channel. The calculation folds the unoscillated DUNE TDR forward-horn-current (FHC) flux through three-flavor matter evolution along the 1284.9 km GLoBES baseline, charged-current cross sections, and a published DUNE selection-efficiency vector. Twelve-point Gaussian quadrature within the 250 MeV flux bins is checked against orders up to 32. In a 40 kt fiducial-mass benchmark at a nominal exposure of \(1.1\times10^{21}\) protons on target (POT) per year, the model yields \(2.4572\times10^{-18}\) selected \(\nu_\mu\) charged-current events per POT, or approximately 2703 selected signal events per exposure year. Treating that nominal annual exposure as a calendar-average rate gives \(8.56\times10^{-5}\) events s\(^{-1}\); accumulating 0.1, 0.3, 1, and 3 expected selected events therefore takes approximately 0.32, 0.97, 3.24, and 9.72 h. We evaluate on-off keying (OOK), pulse-position modulation (PPM), repetition-5 soft combining, and finite 40-bit payload plus CRC-8 packets under explicit signal-event budgets. At one expected event per ON slot and zero background, one of 12,000 uncoded packet trials succeeds (\(8.3\times10^{-5}\); 95% Wilson interval \(1.5\times10^{-5}\) to \(4.7\times10^{-4}\)). This conditional benchmark omits reconstructed-energy migration, spill-resolved live time, operational backgrounds, and synchronization acquisition; it is not evidence of a practical long-baseline link.
+We present a DUNE-based source-to-count benchmark and finite-decoder study for a neutrino counting channel. The calculation folds the unoscillated DUNE TDR forward-horn-current (FHC) flux through three-flavor matter evolution along the 1284.9 km GLoBES baseline, charged-current cross sections, and a published DUNE selection-efficiency vector. Twelve-point Gaussian quadrature within the 250 MeV flux bins is checked against orders up to 32. In a 40 kt fiducial-mass benchmark at a nominal exposure of \(1.1\times10^{21}\) protons on target (POT) per year, the conditional fold yields approximately \(2.5\times10^{-18}\) selected \(\nu_\mu\) charged-current events per POT, or about 2700 selected signal events per exposure year. Treating that nominal annual exposure as a calendar-average rate gives approximately \(8.6\times10^{-5}\) events s\(^{-1}\); accumulating 0.1, 0.3, 1, and 3 expected selected events therefore takes approximately 0.32, 0.97, 3.24, and 9.72 h. We evaluate on-off keying (OOK), pulse-position modulation (PPM), repetition-5 soft combining, and finite 40-bit payload plus CRC-8 packets under explicit signal-event budgets. At one expected event per ON slot and zero background, one of 12,000 packet trials with no repetition or forward-error correction succeeds (\(8.3\times10^{-5}\); 95% Wilson interval \(1.5\times10^{-5}\) to \(4.7\times10^{-4}\)); each packet still includes CRC-8. This conditional benchmark omits reconstructed-energy migration, propagated physical uncertainties, spill-resolved live time, operational backgrounds, and synchronization acquisition. The flux-plane to oscillation-baseline mapping also remains unconfirmed; the rate is not a detector prediction.
 
 **Keywords:** neutrino communication; DUNE; Earth matter effects; Poisson channel; finite-block coding; pulse-position modulation.
 
@@ -68,9 +68,9 @@ For scale estimates, the nominal annual POT is divided by calendar seconds. An e
 
 ### 3.1 Source fold and propagation
 
-The PREM chord has a path-average density of 3.059 g cm\(^{-3}\); the public GLoBES configuration uses a constant 2.848 g cm\(^{-3}\) reference. With the true-energy efficiency proxy, the PREM fold gives \(2.4572\times10^{-18}\) selected \(\nu_\mu\) CC events/POT in 40 kt. The constant-density version of the same model gives \(2.4591\times10^{-18}\) events/POT, a 0.08% difference for this integrated observable. This comparison is internal to the same rate-fold implementation and does not characterize total model accuracy; the efficiency proxy and omitted migration dominate the interpretation.
+The PREM chord has a path-average density of 3.059 g cm\(^{-3}\); the public GLoBES configuration uses a constant 2.848 g cm\(^{-3}\) reference. With the true-energy efficiency proxy, the conditional PREM fold gives about \(2.5\times10^{-18}\) selected \(\nu_\mu\) CC events/POT in 40 kt. The constant-density version of the same model gives a similar rate; the two numerical outputs differ by 0.08% for this integrated observable. This comparison is internal to the same rate-fold implementation and does not characterize total model accuracy; the efficiency proxy and omitted migration dominate the interpretation.
 
-At \(1.1\times10^{21}\) POT per nominal exposure year, the result is approximately 2703 selected events per year, or \(8.56\times10^{-5}\) events per calendar second. The input spectrum, bin-averaged survival probability, and selected contribution by energy are shown in Fig. 1. Figure 2 shows the PREM chord and compares its oscillation calculation with a constant-density approximation.
+At \(1.1\times10^{21}\) POT per nominal exposure year, the result is about 2700 selected events per year, or \(8.6\times10^{-5}\) events per calendar second. The input spectrum, bin-averaged survival probability, and selected contribution by energy are shown in Fig. 1. Figure 2 shows the PREM chord and compares its oscillation calculation with a constant-density approximation.
 
 ![DUNE TDR FHC far flux, bin-averaged survival probability, and selected event contribution.](../figures/01_dune_source_propagation_fold.svg)
 
@@ -82,15 +82,15 @@ At \(1.1\times10^{21}\) POT per nominal exposure year, the result is approximate
 
 The energy-bin integration was checked by increasing the Gauss–Legendre order while holding the remaining inputs fixed. Relative to the 32-node rate, order 12 differs by \(1.36\times10^{-5}\); the largest difference in the tested orders 4–32 is \(7.65\times10^{-4}\) at order 4. The sequence is not strictly monotonic, so we report the values rather than infer a monotone error law. The rate is also stable against PREM segment size: the 10, 5, and 2 km results differ from the 1 km result by less than \(10^{-10}\) relative.
 
-| Gauss–Legendre nodes/bin | Selected events/POT (40 kt) | Relative difference from 32 nodes |
-|---:|---:|---:|
-| 4 | \(2.45908\times10^{-18}\) | \(7.65\times10^{-4}\) |
-| 6 | \(2.45680\times10^{-18}\) | \(1.61\times10^{-4}\) |
-| 8 | \(2.45693\times10^{-18}\) | \(1.09\times10^{-4}\) |
-| 12 | \(2.45716\times10^{-18}\) | \(1.36\times10^{-5}\) |
-| 16 | \(2.45724\times10^{-18}\) | \(1.66\times10^{-5}\) |
-| 24 | \(2.45718\times10^{-18}\) | \(8.82\times10^{-6}\) |
-| 32 | \(2.45720\times10^{-18}\) | reference |
+| Gauss–Legendre nodes/bin | Relative rate difference from 32-node value |
+|---:|---:|
+| 4 | \(7.65\times10^{-4}\) |
+| 6 | \(1.61\times10^{-4}\) |
+| 8 | \(1.09\times10^{-4}\) |
+| 12 | \(1.36\times10^{-5}\) |
+| 16 | \(1.66\times10^{-5}\) |
+| 24 | \(8.82\times10^{-6}\) |
+| 32 | reference |
 
 An independent numerical-method check compared the eigensolver with scipy.linalg.expm segment evolution at seven energies from 0.5 to 8 GeV. For both constant-density and PREM paths, the maximum absolute difference among the nine transition probabilities was \(1.2\times10^{-13}\). This supports the numerical matrix-evolution implementation; it does not independently validate oscillation inputs, flux, cross sections, or detector response against a GLoBES run.
 
@@ -108,12 +108,14 @@ At an expected 0.1 selected signal events per ON slot, ideal equiprobable OOK wi
 
 PPM is compared at the same average selected-signal event budget per channel slot, \(q\), as OOK. For example, at \(q=0.1\) and zero background, the conditional ON-slot means are 0.2 for OOK, 0.4 for PPM-4, and 0.8 for PPM-8. This equalizes mean signal events per slot, but the error metrics differ (OOK bit error versus PPM symbol error). PPM also trades raw rate for symbol reliability: it carries \(\log_2(M)/M\) raw bits per slot, compared with 1 for equiprobable OOK and 0.2 for repetition-5.
 
-| Scheme | Raw bits/slot | Mean signal events/raw bit at \(q=0.1\) | Incident-proton beam energy/raw bit | Error metric | Error probability, \(b=0\) |
+| Scheme | Raw bits/slot | Mean signal events/raw bit at \(q=0.1\) | Conditional incident-proton primary-beam energy equivalent/raw bit (not system energy) | Error metric | Error probability, \(b=0\) |
 |---|---:|---:|---:|---|---:|
 | OOK | 1.000 | 0.100 | \(7.82\times10^8\) J | bit error | 0.4094 |
 | repetition-5 | 0.200 | 0.500 | \(3.91\times10^9\) J | bit error | 0.1839 |
 | PPM-4 | 0.500 | 0.200 | \(1.56\times10^9\) J | symbol error | 0.5027 |
 | PPM-8 | 0.375 | 0.267 | \(2.09\times10^9\) J | symbol error | 0.3932 |
+
+The energy column converts the selected-event budget through the modeled events/POT and 120 GeV incident-proton energy. It is a conditional on-target beam-energy equivalent per raw bit, not the energy consumed by an operational communication system or receiver.
 
 At the larger matched budget \(q=0.5\), PPM-4 and PPM-8 have symbol-error probabilities 0.1015 and 0.0160, respectively, with raw rates 0.5 and 0.375 bit/slot. The complete comparison at \(q=0.1,0.25,0.5\) and both background sensitivities is in equal_event_budget_comparison.csv. Figure 5 shows error metrics and raw rate on the matched per-slot event-budget axis. This uncoded comparison does not account for symbol synchronization, framing, coding overhead, or equalized physical detector-background rates.
 
@@ -121,7 +123,7 @@ At the larger matched budget \(q=0.5\), PPM-4 and PPM-8 have symbol-error probab
 
 *Figure 5. Left: OOK bit-error probability and PPM symbol-error probability, labelled separately, against average selected signal events per slot. Right: uncoded raw bits per slot. The event budget is an exposure proxy, not an absolute energy measurement.*
 
-The finite packet experiment makes the framing cost visible. At one expected signal event per ON slot and zero background, one of 12,000 uncoded trials succeeds: \(8.3\times10^{-5}\), with a 95% Wilson interval \([1.5\times10^{-5},4.7\times10^{-4}]\). The interval is broad because this is one observed success. Repetition-5 gives a 0.855 success fraction at that operating point. With repetition-5 at three events per ON slot and zero background, all 12,000 packets decode correctly; the 95% Wilson lower bound is about 0.99968, not 1. At one event per slot, the 48-bit frame takes about 155.5 h without repetition and 777.7 h with repetition under the calendar-average exposure conversion. These are simulation outcomes under externally supplied timing and the stated rate model, not measured communications performance.
+The finite packet experiment makes the framing cost visible. At one expected signal event per ON slot and zero background, one of 12,000 packet trials with no repetition or forward-error correction succeeds (CRC-8 is still appended): \(8.3\times10^{-5}\), with a 95% Wilson interval \([1.5\times10^{-5},4.7\times10^{-4}]\). The interval is broad because this is one observed success. Repetition-5 gives a 0.855 success fraction at that operating point. With repetition-5 at three events per ON slot and zero background, all 12,000 packets decode correctly; the 95% Wilson lower bound is about 0.99968, not 1. At one event per slot, the 48-bit frame takes about 155.5 h without repetition and 777.7 h with repetition under the calendar-average exposure conversion. These are simulation outcomes under externally supplied timing and the stated rate model, not measured communications performance.
 
 At a 0.01 event-per-slot background, success is lower at the same signal mean. CRC acceptance is nonzero even when no complete payload is correct; the CRC therefore cannot be interpreted as a message-delivery guarantee. Figure 6 and `finite_crc_packet_simulation.csv` report correct packet acceptance, CRC acceptance, and undetected wrong payload outcomes for every simulated operating point.
 
@@ -137,7 +139,7 @@ The event-rate conversion puts the sparse-symbol regime on an operational timesc
 
 ## 4. Discussion
 
-The main result is methodological: with public DUNE-like flux and detector inputs, a 40 kt fiducial receiver yields about 2700 selected \(\nu_\mu\) CC events per nominal exposure year in this source-rate fold. At the resulting calendar-average rate, a single binary slot with a sub-event mean lasts tens of minutes to hours. Framing multiplies that duration by dozens of encoded bits, and repetition improves reliability only by consuming additional slots. PPM can improve symbol discrimination when the event budget is concentrated in one of several slots, but pays in raw bits/slot and requires symbol timing. These uncoded results do not replace a capacity analysis or practical synchronization protocol.
+The main result is methodological: under the stated assumptions, the conditional DUNE-input fold yields about \(2.5\times10^{-18}\) selected \(\nu_\mu\) CC events/POT, or about 2700 events per nominal exposure year for a 40 kt fiducial receiver. This is not a detector prediction: the reconstructed-energy efficiency is used as a true-energy proxy, physical input uncertainties are not propagated, and the flux-plane/baseline coordinate mapping remains unconfirmed. At the resulting calendar-average rate, a single binary slot with a sub-event mean lasts tens of minutes to hours. Framing multiplies that duration by dozens of encoded bits, and repetition improves reliability only by consuming additional slots. PPM can improve symbol discrimination when the event budget is concentrated in one of several slots, but pays in raw bits/slot and requires symbol timing. These uncoded results do not replace a capacity analysis or practical synchronization protocol.
 
 The numerical result is not a direct prediction of a functioning communication link. The source flux is a far-detector simulation for an oscillation experiment, and the detector response is simplified by using a reconstructed-energy efficiency against true energy. Most importantly for a real decoder, no spill-resolved source schedule, beam-on/beam-off background model, or clock-acquisition procedure has been propagated into the packet simulation. Although nominal annual POT incorporates projected accelerator availability, the model contains no explicit spill timing or live-time window; those determine whether symbols of the estimated duration could actually be scheduled. A different source, spectrum, receiver geometry, or coded modulation would define a different benchmark and must be modeled explicitly.
 
@@ -147,7 +149,7 @@ Paper I and the present article remain complementary: Paper I records the NuMI-c
 
 ## 5. Conclusion
 
-We implemented and tested a reproducible DUNE TDR-based source-to-count model and a finite-message Poisson decoder baseline. The model predicts approximately 2703 selected \(\nu_\mu\) CC signal events per 40 kt exposure-year under the stated flux, oscillation, cross-section, and efficiency-proxy assumptions. At nominal continuous exposure, accumulating even one selected event takes about 3.24 h. Packet simulations illustrate the reliability–latency tradeoff between uncoded OOK and repetition-5, but omit synchronization acquisition, spill timing, detector migration, realistic backgrounds, retransmission, and accelerator electrical energy. The code, inputs, tables, tests, and figures are published alongside this draft to make those limits visible and the next model improvements concrete.
+We implemented and tested a reproducible DUNE TDR-based source-to-count model and a finite-message Poisson decoder baseline. Under the stated assumptions, the conditional fold gives about \(2.5\times10^{-18}\) selected \(\nu_\mu\) CC signal events/POT, or about 2700 events per 40 kt nominal exposure-year. This is a source-to-count benchmark, not a detector prediction: the reconstructed-energy efficiency is used as a true-energy proxy, physical input uncertainties are not propagated, the flux-plane/baseline mapping is unconfirmed, and a direct GLoBES probability or rate comparison remains outstanding. The packet simulations include CRC-8 but no repetition in the low-success reference case; repetition-5 improves reliability at the cost of more channel uses. Synchronization acquisition, spill timing, realistic backgrounds, retransmission, and accelerator electrical energy remain outside the model.
 
 ## Data and code availability
 
