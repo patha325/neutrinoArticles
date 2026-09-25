@@ -1,0 +1,5 @@
+signal_mean_per_on_slot,slot_duration_seconds,slot_duration_hours,pot_per_on_slot,selected_events_per_year_40kt,selected_events_per_second_40kt,status
+0.1,1167.5543055778614,0.32432064043829484,4.069731969907875e+16,2702.880701072067,8.564912100641579e-05,source-derived rate folded from DUNE TDR flux; effective continuous exposure; not a spill-level link simulation
+0.3,3502.6629167335836,0.9729619213148843,1.2209195909723622e+17,2702.880701072067,8.564912100641579e-05,source-derived rate folded from DUNE TDR flux; effective continuous exposure; not a spill-level link simulation
+1.0,11675.543055778613,3.2432064043829483,4.0697319699078746e+17,2702.880701072067,8.564912100641579e-05,source-derived rate folded from DUNE TDR flux; effective continuous exposure; not a spill-level link simulation
+3.0,35026.629167335836,9.729619213148844,1.2209195909723622e+18,2702.880701072067,8.564912100641579e-05,source-derived rate folded from DUNE TDR flux; effective continuous exposure; not a spill-level link simulation
