@@ -15,13 +15,16 @@
   "selected_numu_cc_events_per_second_40kt_calendar_average": 8.564912100641579e-05,
   "calendar_average_pot_per_second": 34856896595431.844,
   "selected_numu_cc_events_per_year_constant_density": 2704.9366054973975,
+  "quadrature_order_32_reference_events_per_pot": 2.457197767167457e-18,
+  "quadrature_order_12_relative_difference_from_order_32": 1.3630756964477797e-05,
+  "max_abs_probability_difference_eigh_vs_scipy_expm": 1.1968204205459188e-13,
   "assumptions": [
     "The FD flux file includes G4LBNF beamline and geometric flux prediction but no oscillation probability.",
-    "Flux plane is 1297 km from Horn 1 in this file; oscillations use the official 1284.9 km GLoBES baseline.",
+    "The provided flux remains at the G4LBNF far-detector histogram plane (documented as 1297 km downstream of Horn 1); oscillation evolution uses the separately configured 1284.9 km baseline. No inverse-square rescaling is applied because the flux is a location-specific beamline simulation, not a point-source fluence law. The coordinate mapping should be checked against the original geometry before a higher-precision prediction.",
     "Only nu_mu CC signal is counted; other flavors, NC, detector-specific cosmic backgrounds, migration smearing, and systematic correlations are omitted.",
     "DUNE post-selection efficiency is applied directly at true energy as a first-order proxy, not as the full reconstructed-energy response.",
-    "Beam exposure is annual POT divided by calendar-year seconds; no pulse schedule, uptime profile, or rapid beam modulation is modeled.",
-    "Background means of 0 and 0.01 per symbol are communication-channel sensitivity scenarios, not DUNE background predictions.",
+    "Nominal annual POT is divided by calendar-year seconds; there is no explicit spill, live-time, or modulation schedule. The nominal POT/year is the published annual exposure convention and already reflects the accelerator scenario's projected annual exposure.",
+    "Background means of 0 and 0.01 are fixed per-slot channel sensitivity scenarios, not measured predictions or fixed physical background rates. Since the slot duration varies by signal mean, these cases do not represent a constant background rate in time.",
     "Energy per delivered bit is proton-beam energy only; wall-plug or accelerator electrical energy is not estimated."
   ]
 }
