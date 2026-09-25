@@ -6,6 +6,7 @@ import csv
 import json
 from pathlib import Path
 import sys
+from scipy.linalg import expm
 
 import matplotlib
 matplotlib.use("Agg")
@@ -15,6 +16,9 @@ import numpy as np
 from neutrino_channel import (
     DuneBenchmark,
     EARTH_RADIUS_KM,
+    KM_TO_EV_INV,
+    MATTER_POTENTIAL_EV_PER_RHO_YE,
+    OSCILLATION,
     SECONDS_PER_YEAR,
     binary_ook_capacity,
     beam_pot_per_second,
@@ -22,8 +26,10 @@ from neutrino_channel import (
     oscillation_probabilities,
     parse_reco_efficiency,
     ppm_symbol_error,
+    proton_beam_energy_j_per_pot,
     prem_density_g_cm3,
     prem_path_segments,
+    pmns_matrix,
     read_flux,
     read_xsec,
     repetition_ber,
@@ -73,7 +79,48 @@ def wilson_interval(successes: float, trials: float, z: float = 1.96) -> tuple[f
     den = 1.0 + z * z / trials
     center = (p + z * z / (2.0 * trials)) / den
     half = z * np.sqrt(p * (1.0 - p) / trials + z * z / (4.0 * trials * trials)) / den
-    return max(0.0, center - half), min(1.0, center + half)
+    low = 0.0 if successes == 0 else max(0.0, center - half)
+    high = 1.0 if successes == trials else min(1.0, center + half)
+    return low, high
+
+
+def expm_probability_crosscheck(energies_gev: np.ndarray,
+                               baseline_km: float,
+                               density_model: str,
+                               constant_density_g_cm3: float = 2.848,
+                               ye: float = 0.50) -> np.ndarray:
+    """Independent SciPy matrix-exponential evolution for validation only.
+
+    The production path diagonalizes each Hermitian Hamiltonian with NumPy.
+    This check uses scipy.linalg.expm for each segment and multiplies the
+    resulting propagators, so the numerical evolution is implemented by an
+    independent algorithm.
+    """
+    U = pmns_matrix(**{
+        "theta12": OSCILLATION["theta12"],
+        "theta13": OSCILLATION["theta13"],
+        "theta23": OSCILLATION["theta23"],
+        "delta_cp": OSCILLATION["delta_cp"],
+    })
+    mass_sq = np.diag([0.0, OSCILLATION["dm21_ev2"], OSCILLATION["dm31_ev2"]])
+    vacuum_mix = U @ mass_sq @ U.conj().T
+    if density_model == "prem":
+        lengths, densities = prem_path_segments(baseline_km, 5.0)
+    elif density_model == "constant":
+        lengths = np.array([baseline_km])
+        densities = np.array([constant_density_g_cm3])
+    else:
+        raise ValueError("density_model must be prem or constant")
+    output = []
+    for energy in np.asarray(energies_gev, dtype=float):
+        evolution = np.eye(3, dtype=complex)
+        for length, density in zip(lengths, densities):
+            hamiltonian = vacuum_mix / (2.0 * energy * 1.0e9)
+            hamiltonian = hamiltonian.copy()
+            hamiltonian[0, 0] += MATTER_POTENTIAL_EV_PER_RHO_YE * density * ye
+            evolution = expm(-1j * hamiltonian * length * KM_TO_EV_INV) @ evolution
+        output.append(np.abs(evolution) ** 2)
+    return np.asarray(output)
 
 
 def figure_source_fold(result: dict, constant: dict) -> None:
@@ -169,7 +216,8 @@ def figure_ber_sweep(rows: list[dict]) -> None:
 
 
 def figure_packet_success(packet_rows: list[dict]) -> None:
-    fig, ax = plt.subplots(figsize=(7.1, 4.6))
+    fig, (ax, zoom) = plt.subplots(1, 2, figsize=(10.2, 4.8),
+                                   gridspec_kw={"width_ratios": [1.55, 1.0]})
     colors = {(1, 0.0): "#bd3c32", (5, 0.0): "#315c9b",
               (1, 0.01): "#e3932d", (5, 0.01): "#2c897a"}
     for repeats in (1, 5):
@@ -181,19 +229,100 @@ def figure_packet_success(packet_rows: list[dict]) -> None:
             y = np.array([r["packet_success"] for r in chosen])
             lo = np.array([r["ci_low"] for r in chosen])
             hi = np.array([r["ci_high"] for r in chosen])
+            y_display = np.where(y == 0.0, 0.5 / chosen[0]["packets"], y)
             label = f"repetition={repeats}, b={b:g}/slot"
-            ax.errorbar(x, y, yerr=[np.maximum(0.0, y - lo),
-                                    np.maximum(0.0, hi - y)], marker="o", capsize=2.5,
+            errors = [np.maximum(0.0, y_display - lo),
+                      np.maximum(0.0, hi - y_display)]
+            ax.errorbar(x, y_display, yerr=errors, marker="o", capsize=2.5,
                         color=colors[(repeats, b)], label=label, lw=1.2, ms=4)
+            low = y_display <= 0.02
+            zoom.errorbar(x[low], y_display[low],
+                          yerr=[errors[0][low], errors[1][low]],
+                          marker="o", capsize=2.5,
+                          color=colors[(repeats, b)], label=label, lw=1.2, ms=4)
     ax.set_xscale("log")
     ax.set_ylim(-0.03, 1.03)
     ax.set_xlabel("Expected signal events in an ON slot")
     ax.set_ylabel("Correctly accepted 40-bit payload fraction")
-    ax.set_title("Finite CRC-8 packet simulation with externally supplied synchronization")
     ax.grid(alpha=0.25, which="both")
-    ax.legend()
+    ax.legend(fontsize=7)
+    ax.set_title("Full range")
+    zoom.set_xscale("log")
+    zoom.set_yscale("log")
+    zoom.set_ylim(1e-5, 0.03)
+    zoom.set_xlabel("Signal events per ON slot")
+    zoom.set_ylabel("Packet success fraction (log scale)")
+    zoom.set_title("Low-success region; zeros plotted at 0.5/N")
+    zoom.grid(alpha=0.25, which="both")
+    zoom.annotate("1/12,000 = 8.3e-5\n95% Wilson CI: 1.5e-5–4.7e-4",
+                  xy=(1.0, 1.0/12000), xytext=(0.15, 0.004),
+                  arrowprops={"arrowstyle": "->", "lw": 0.8}, fontsize=7)
     fig.tight_layout()
     save_figure(fig, "04_finite_packet_success")
+
+
+def figure_ppm_tradeoff(rows: list[dict]) -> None:
+    """Plot error and raw rate against average signal events per slot.
+
+    Equiprobable OOK has p_on=1/2. M-PPM sends one ON slot in M. The x-axis
+    therefore uses the average signal event budget per channel slot, not the
+    conditional mean in an ON slot. Error metrics are explicitly distinguished.
+    """
+    fig, (err, rate) = plt.subplots(1, 2, figsize=(10.0, 4.5),
+                                   gridspec_kw={"width_ratios": [1.45, 1.0]})
+    colors = {"OOK": "#bd3c32", "repeat-5": "#315c9b",
+              "PPM-4": "#2b8c68", "PPM-8": "#8b63a9"}
+    for scheme in ("OOK", "repeat-5", "PPM-4", "PPM-8"):
+        for background, linestyle in ((0.0, "-"), (0.01, "--")):
+            selected = sorted(
+                [r for r in rows if r["scheme"] == scheme and
+                 r["background_mean"] == background],
+                key=lambda r: r["average_signal_events_per_slot"]
+            )
+            x = np.array([r["average_signal_events_per_slot"] for r in selected])
+            y = np.array([r["ber"] if scheme in ("OOK", "repeat-5")
+                          else r["ppm_symbol_error"] for r in selected])
+            err.plot(x, y, color=colors[scheme], ls=linestyle, lw=1.5,
+                     label=f"{scheme}, b={background:g}/slot")
+    err.set_xscale("log")
+    err.set_yscale("log")
+    err.set_xlabel("Average signal events per channel slot")
+    err.set_ylabel("Error probability (OOK BER; PPM symbol error)")
+    err.set_title("Error at a matched average event budget")
+    err.grid(alpha=0.25, which="both")
+    err.legend(fontsize=7, ncol=2)
+    rate.plot([0.006, 0.7], [1.0, 1.0], color=colors["OOK"], lw=1.6,
+              label="OOK: 1 bit/slot")
+    rate.plot([0.006, 0.7], [0.2, 0.2], color=colors["repeat-5"], lw=1.6,
+              label="repeat-5: 0.2 bit/slot")
+    rate.plot([0.006, 0.7], [np.log2(4)/4]*2, color=colors["PPM-4"], lw=1.6,
+              label="PPM-4: 0.5 bit/slot")
+    rate.plot([0.006, 0.7], [np.log2(8)/8]*2, color=colors["PPM-8"], lw=1.6,
+              label="PPM-8: 0.375 bit/slot")
+    rate.set_xscale("log")
+    rate.set_xlim(0.006, 0.7)
+    rate.set_ylim(0, 1.08)
+    rate.set_xlabel("Average signal events per channel slot")
+    rate.set_ylabel("Raw information rate [bits/slot]")
+    rate.set_title("Uncoded raw rate")
+    rate.grid(alpha=0.25, which="both")
+    rate.legend(fontsize=8, loc="center right")
+    fig.tight_layout()
+    save_figure(fig, "06_ppm_energy_rate_tradeoff")
+
+
+def figure_quadrature_convergence(rows: list[dict]) -> None:
+    order = np.array([r["quadrature_order"] for r in rows])
+    relative = np.array([r["relative_difference_from_order_32"] for r in rows])
+    fig, ax = plt.subplots(figsize=(6.2, 4.0))
+    ax.plot(order, np.maximum(relative, 1e-16), marker="o", color="#315c9b")
+    ax.set_yscale("log")
+    ax.set_xlabel("Gauss–Legendre nodes per 250 MeV flux bin")
+    ax.set_ylabel("Relative difference in folded event rate")
+    ax.set_title("Energy-bin quadrature convergence (order 32 reference)")
+    ax.grid(alpha=0.25, which="both")
+    fig.tight_layout()
+    save_figure(fig, "07_quadrature_convergence")
 
 
 def figure_latency(rate_rows: list[dict]) -> None:
@@ -224,6 +353,76 @@ def main() -> None:
         density_model="prem",
         max_step_km=benchmark.max_profile_step_km,
     )
+    # Numerical convergence of the folded rate against a higher-order
+    # quadrature reference. This tests bin integration separately from PREM
+    # segment-size convergence.
+    quadrature_rows = []
+    quadrature_results = {}
+    for order in (4, 6, 8, 12, 16, 24, 32):
+        folded = selected_spectrum_per_pot(
+            flux=flux, cross_sections=xsec,
+            baseline_km=benchmark.baseline_km,
+            fiducial_mass_kt=benchmark.fiducial_mass_kt,
+            density_model="prem", max_step_km=benchmark.max_profile_step_km,
+            quadrature_order=order,
+        )
+        quadrature_results[order] = folded["events_per_pot"]
+    high_order_rate = quadrature_results[32]
+    for order, rate in quadrature_results.items():
+        quadrature_rows.append({
+            "quadrature_order": order,
+            "selected_events_per_pot": rate,
+            "relative_difference_from_order_32": abs(rate / high_order_rate - 1.0),
+            "reference_order": 32,
+        })
+    write_csv(DATA_OUT / "quadrature_convergence.csv", quadrature_rows)
+
+    step_rows = []
+    for step_km in (10.0, 5.0, 2.0, 1.0):
+        folded = selected_spectrum_per_pot(
+            flux=flux, cross_sections=xsec,
+            baseline_km=benchmark.baseline_km,
+            fiducial_mass_kt=benchmark.fiducial_mass_kt,
+            density_model="prem", max_step_km=step_km,
+            quadrature_order=12,
+        )
+        step_rows.append({"max_profile_step_km": step_km,
+                          "selected_events_per_pot": folded["events_per_pot"]})
+    step_reference = step_rows[-1]["selected_events_per_pot"]
+    for row in step_rows:
+        row["relative_difference_from_1km"] = abs(
+            row["selected_events_per_pot"] / step_reference - 1.0
+        )
+    write_csv(DATA_OUT / "profile_step_convergence.csv", step_rows)
+
+    # Independent numerical-method cross-check: compare the production
+    # Hermitian-eigensolver propagation against SciPy's general matrix
+    # exponential for constant PREM segments.
+    crosscheck_rows = []
+    check_energies = np.array([0.5, 1.0, 2.0, 2.5, 3.0, 5.0, 8.0])
+    for density_model in ("constant", "prem"):
+        production = oscillation_probabilities(
+            check_energies, benchmark.baseline_km,
+            density_model=density_model,
+            constant_density_g_cm3=benchmark.density_g_cm3,
+            max_step_km=benchmark.max_profile_step_km,
+        )
+        independent = expm_probability_crosscheck(
+            check_energies, benchmark.baseline_km, density_model,
+            constant_density_g_cm3=benchmark.density_g_cm3,
+            ye=benchmark.ye_crust,
+        )
+        for i, energy in enumerate(check_energies):
+            crosscheck_rows.append({
+                "density_model": density_model,
+                "energy_gev": energy,
+                "p_mumu_production_eigh": production[i, 1, 1],
+                "p_mumu_scipy_expm": independent[i, 1, 1],
+                "max_abs_probability_difference": np.max(
+                    np.abs(production[i] - independent[i])
+                ),
+            })
+    write_csv(DATA_OUT / "oscillation_expm_crosscheck.csv", crosscheck_rows)
     constant = selected_spectrum_per_pot(
         flux=flux, cross_sections=xsec,
         baseline_km=benchmark.baseline_km,
@@ -273,21 +472,75 @@ def main() -> None:
             row_base = {
                 "signal_mean": signal_mean,
                 "background_mean": background,
+                "average_signal_events_per_slot": 0.5 * signal_mean,
                 "binary_ook_capacity_bits_per_slot_p_on_le_0p5": cap,
                 "capacity_optimal_p_on": p_capacity,
                 "ook_ber": ber,
                 "repetition5_ber_per_payload_bit": ber5,
             }
-            sweep_rows.append({**row_base, "scheme": "OOK", "ber": ber})
-            sweep_rows.append({**row_base, "scheme": "repeat-5", "ber": ber5})
+            sweep_rows.append({
+                **row_base, "scheme": "OOK", "ber": ber,
+                "raw_bits_per_slot": 1.0,
+                "average_signal_events_per_raw_bit": 0.5 * signal_mean,
+                "error_metric": "bit-error probability",
+            })
+            sweep_rows.append({
+                **row_base, "scheme": "repeat-5", "ber": ber5,
+                "raw_bits_per_slot": 0.2,
+                "average_signal_events_per_raw_bit": 2.5 * signal_mean,
+                "error_metric": "bit-error probability",
+            })
             for order in (4, 8):
                 sweep_rows.append({
                     **row_base,
                     "scheme": f"PPM-{order}",
                     "ppm_symbol_error": ppm_symbol_error(signal_mean, background, order),
                     "ppm_raw_bits_per_slot": np.log2(order) / order,
+                    "average_signal_events_per_slot": signal_mean / order,
+                    "average_signal_events_per_raw_bit": signal_mean / np.log2(order),
+                    "raw_bits_per_slot": np.log2(order) / order,
+                    "error_metric": "symbol-error probability",
                 })
     write_csv(DATA_OUT / "few_event_coding_sweep.csv", sweep_rows)
+
+    equal_budget_rows = []
+    for q in (0.1, 0.25, 0.5):
+        for background in (0.0, 0.01):
+            for scheme in ("OOK", "repeat-5", "PPM-4", "PPM-8"):
+                if scheme == "OOK":
+                    signal_on = 2.0 * q
+                    error = ook_error_probabilities(signal_on, background)[2]
+                    rate = 1.0
+                    energy_bit = q
+                    metric = "bit-error probability"
+                elif scheme == "repeat-5":
+                    signal_on = 2.0 * q
+                    error = repetition_ber(signal_on, background, repetitions=5)
+                    rate = 0.2
+                    energy_bit = 5.0 * q
+                    metric = "bit-error probability"
+                else:
+                    order = int(scheme.split("-")[1])
+                    signal_on = order * q
+                    error = ppm_symbol_error(signal_on, background, order)
+                    rate = np.log2(order) / order
+                    energy_bit = order * q / np.log2(order)
+                    metric = "symbol-error probability"
+                equal_budget_rows.append({
+                    "average_signal_events_per_slot": q,
+                    "background_events_per_slot_sensitivity": background,
+                    "scheme": scheme,
+                    "on_slot_signal_mean": signal_on,
+                    "average_signal_events_per_raw_bit": energy_bit,
+                    "proton_beam_energy_j_per_raw_bit":
+                        energy_bit / selected_per_pot *
+                        proton_beam_energy_j_per_pot(benchmark.proton_energy_gev),
+                    "raw_bits_per_slot": rate,
+                    "error_metric": metric,
+                    "error_probability": error,
+                    "input_convention": "equiprobable OOK; one uniformly placed ON slot per PPM symbol; repetition factor five",
+                })
+    write_csv(DATA_OUT / "equal_event_budget_comparison.csv", equal_budget_rows)
 
     packet_rows = []
     packet_points = (0.1, 0.3, 1.0, 3.0)
@@ -313,6 +566,7 @@ def main() -> None:
                 delivered_bits = 40 * p
                 packet_rows.append({
                     **result_packet,
+                    "successful_packets": successes,
                     "signal_mean": signal_mean,
                     "background_mean": background,
                     "ci_low": low,
@@ -350,13 +604,19 @@ def main() -> None:
         "calendar_average_pot_per_second": pot_rate,
         "selected_numu_cc_events_per_year_constant_density":
             constant["events_per_pot"] * benchmark.pot_per_year,
+        "quadrature_order_32_reference_events_per_pot": high_order_rate,
+        "quadrature_order_12_relative_difference_from_order_32":
+            abs(result["events_per_pot"] / high_order_rate - 1.0),
+        "max_abs_probability_difference_eigh_vs_scipy_expm": max(
+            row["max_abs_probability_difference"] for row in crosscheck_rows
+        ),
         "assumptions": [
             "The FD flux file includes G4LBNF beamline and geometric flux prediction but no oscillation probability.",
-            "Flux plane is 1297 km from Horn 1 in this file; oscillations use the official 1284.9 km GLoBES baseline.",
+            "The provided flux remains at the G4LBNF far-detector histogram plane (documented as 1297 km downstream of Horn 1); oscillation evolution uses the separately configured 1284.9 km baseline. No inverse-square rescaling is applied because the flux is a location-specific beamline simulation, not a point-source fluence law. The coordinate mapping should be checked against the original geometry before a higher-precision prediction.",
             "Only nu_mu CC signal is counted; other flavors, NC, detector-specific cosmic backgrounds, migration smearing, and systematic correlations are omitted.",
             "DUNE post-selection efficiency is applied directly at true energy as a first-order proxy, not as the full reconstructed-energy response.",
-            "Beam exposure is annual POT divided by calendar-year seconds; no pulse schedule, uptime profile, or rapid beam modulation is modeled.",
-            "Background means of 0 and 0.01 per symbol are communication-channel sensitivity scenarios, not DUNE background predictions.",
+            "Nominal annual POT is divided by calendar-year seconds; there is no explicit spill, live-time, or modulation schedule. The nominal POT/year is the published annual exposure convention and already reflects the accelerator scenario's projected annual exposure.",
+            "Background means of 0 and 0.01 are fixed per-slot channel sensitivity scenarios, not measured predictions or fixed physical background rates. Since the slot duration varies by signal mean, these cases do not represent a constant background rate in time.",
             "Energy per delivered bit is proton-beam energy only; wall-plug or accelerator electrical energy is not estimated.",
         ],
     }
@@ -380,6 +640,8 @@ def main() -> None:
     figure_ber_sweep(ber_rows)
     figure_packet_success(packet_rows)
     figure_latency(rate_rows)
+    figure_ppm_tradeoff(sweep_rows)
+    figure_quadrature_convergence(quadrature_rows)
 
     print(f"Selected nu_mu CC events per POT in 40 kt: {selected_per_pot:.6e}")
     print(f"Selected events per DUNE exposure year: {selected_per_year:.3f}")
