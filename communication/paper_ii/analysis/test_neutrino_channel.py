@@ -20,6 +20,7 @@ from neutrino_channel import (
     selected_spectrum_per_pot,
     simulate_crc_packets,
 )
+from run_simulation import expm_probability_crosscheck, wilson_interval
 
 
 class NeutrinoChannelTests(unittest.TestCase):
@@ -39,6 +40,30 @@ class NeutrinoChannelTests(unittest.TestCase):
         )
         np.testing.assert_allclose(probs.sum(axis=1), np.ones((3, 3)), atol=1e-10)
         self.assertTrue(np.all((probs >= 0.0) & (probs <= 1.0)))
+
+    def test_independent_scipy_exponential_crosscheck(self):
+        energy = np.array([0.5, 1.0, 2.5, 5.0])
+        for density in ("constant", "prem"):
+            production = oscillation_probabilities(
+                energy, 1284.9, density_model=density, max_step_km=5.0
+            )
+            independent = expm_probability_crosscheck(
+                energy, 1284.9, density_model=density
+            )
+            self.assertLess(float(np.max(np.abs(production-independent))), 2e-12)
+
+    def test_quadrature_convergence_and_rare_event_interval(self):
+        from neutrino_channel import selected_spectrum_per_pot
+        low = selected_spectrum_per_pot(
+            density_model="prem", quadrature_order=12
+        )["events_per_pot"]
+        high = selected_spectrum_per_pot(
+            density_model="prem", quadrature_order=32
+        )["events_per_pot"]
+        self.assertLess(abs(low / high - 1.0), 2e-5)
+        low_ci, high_ci = wilson_interval(1, 12000)
+        self.assertAlmostEqual(low_ci, 1.47e-5, delta=0.1e-5)
+        self.assertAlmostEqual(high_ci, 4.72e-4, delta=0.05e-4)
 
     def test_ook_background_free_limit_and_capacity(self):
         _, miss, ber = ook_error_probabilities(1.0, 0.0)
