@@ -1,0 +1,25 @@
+average_signal_events_per_slot,background_events_per_slot_sensitivity,scheme,on_slot_signal_mean,average_signal_events_per_raw_bit,proton_beam_energy_j_per_raw_bit,raw_bits_per_slot,error_metric,error_probability,input_convention
+0.1,0.0,OOK,0.2,0.1,782451536.2595024,1.0,bit-error probability,0.4093653765389909,equiprobable OOK; one uniformly placed ON slot per PPM symbol; repetition factor five
+0.1,0.0,repeat-5,0.2,0.5,3912257681.2975125,0.2,bit-error probability,0.18393972058572122,equiprobable OOK; one uniformly placed ON slot per PPM symbol; repetition factor five
+0.1,0.0,PPM-4,0.4,0.2,1564903072.5190048,0.5,symbol-error probability,0.5027400345267294,equiprobable OOK; one uniformly placed ON slot per PPM symbol; repetition factor five
+0.1,0.0,PPM-8,0.8,0.26666666666666666,2086537430.0253398,0.375,symbol-error probability,0.39316284360256903,equiprobable OOK; one uniformly placed ON slot per PPM symbol; repetition factor five
+0.1,0.01,OOK,0.2,0.1,782451536.2595024,1.0,bit-error probability,0.41026720611050954,equiprobable OOK; one uniformly placed ON slot per PPM symbol; repetition factor five
+0.1,0.01,repeat-5,0.2,0.5,3912257681.2975125,0.2,bit-error probability,0.19935416230522068,equiprobable OOK; one uniformly placed ON slot per PPM symbol; repetition factor five
+0.1,0.01,PPM-4,0.4,0.2,1564903072.5190048,0.5,symbol-error probability,0.5066996905798543,equiprobable OOK; one uniformly placed ON slot per PPM symbol; repetition factor five
+0.1,0.01,PPM-8,0.8,0.26666666666666666,2086537430.0253398,0.375,symbol-error probability,0.40539931054476097,equiprobable OOK; one uniformly placed ON slot per PPM symbol; repetition factor five
+0.25,0.0,OOK,0.5,0.25,1956128840.6487563,1.0,bit-error probability,0.3032653298563167,equiprobable OOK; one uniformly placed ON slot per PPM symbol; repetition factor five
+0.25,0.0,repeat-5,0.5,1.25,9780644203.24378,0.2,bit-error probability,0.0410424993119494,equiprobable OOK; one uniformly placed ON slot per PPM symbol; repetition factor five
+0.25,0.0,PPM-4,1.0,0.5,3912257681.2975125,0.5,symbol-error probability,0.27590958087858186,equiprobable OOK; one uniformly placed ON slot per PPM symbol; repetition factor five
+0.25,0.0,PPM-8,2.0,0.6666666666666666,5216343575.06335,0.375,symbol-error probability,0.1184183728320366,equiprobable OOK; one uniformly placed ON slot per PPM symbol; repetition factor five
+0.25,0.01,OOK,0.5,0.25,1956128840.6487563,1.0,bit-error probability,0.30522287253154906,equiprobable OOK; one uniformly placed ON slot per PPM symbol; repetition factor five
+0.25,0.01,repeat-5,0.5,1.25,9780644203.24378,0.2,bit-error probability,0.06342612075021958,equiprobable OOK; one uniformly placed ON slot per PPM symbol; repetition factor five
+0.25,0.01,PPM-4,1.0,0.5,3912257681.2975125,0.5,symbol-error probability,0.2813505244762402,equiprobable OOK; one uniformly placed ON slot per PPM symbol; repetition factor five
+0.25,0.01,PPM-8,2.0,0.6666666666666666,5216343575.06335,0.375,symbol-error probability,0.12766038457922047,equiprobable OOK; one uniformly placed ON slot per PPM symbol; repetition factor five
+0.5,0.0,OOK,1.0,0.5,3912257681.2975125,1.0,bit-error probability,0.18393972058572122,equiprobable OOK; one uniformly placed ON slot per PPM symbol; repetition factor five
+0.5,0.0,repeat-5,1.0,2.5,19561288406.48756,0.2,bit-error probability,0.003368973499542734,equiprobable OOK; one uniformly placed ON slot per PPM symbol; repetition factor five
+0.5,0.0,PPM-4,2.0,1.0,7824515362.595025,0.5,symbol-error probability,0.10150146242746005,equiprobable OOK; one uniformly placed ON slot per PPM symbol; repetition factor five
+0.5,0.0,PPM-8,4.0,1.3333333333333333,10432687150.1267,0.375,symbol-error probability,0.016026184027643442,equiprobable OOK; one uniformly placed ON slot per PPM symbol; repetition factor five
+0.5,0.01,OOK,1.0,0.5,3912257681.2975125,1.0,bit-error probability,0.18708457291117767,equiprobable OOK; one uniformly placed ON slot per PPM symbol; repetition factor five
+0.5,0.01,repeat-5,1.0,2.5,19561288406.48756,0.2,bit-error probability,0.019992785812050703,equiprobable OOK; one uniformly placed ON slot per PPM symbol; repetition factor five
+0.5,0.01,PPM-4,2.0,1.0,7824515362.595025,0.5,symbol-error probability,0.10551473404264289,equiprobable OOK; one uniformly placed ON slot per PPM symbol; repetition factor five
+0.5,0.01,PPM-8,4.0,1.3333333333333333,10432687150.1267,0.375,symbol-error probability,0.01854045926088821,equiprobable OOK; one uniformly placed ON slot per PPM symbol; repetition factor five
